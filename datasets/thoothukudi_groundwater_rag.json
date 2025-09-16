@@ -1,0 +1,74 @@
+{
+  "location": "THOOTHUKUDI",
+  "category": {
+    "total": "safe",
+    "non_command": "safe"
+  },
+  "stage_of_extraction": {
+    "total": 27.309065106357632,
+    "non_command": 35.72951790636164
+  },
+  "water_availability": {
+    "total_availability": 77567.54000000001,
+    "current_availability": 77567.54000000001,
+    "future_availability": 55600.840000000004
+  },
+  "recharge_summary": {
+    "total_recharge": 85944.71,
+    "rainfall_recharge": 23605.749999999996,
+    "agriculture_recharge": 17840.170000000002
+  },
+  "draft_summary": {
+    "total_draft": 21182.97,
+    "agriculture_draft": 20311.24,
+    "domestic_draft": 464.6651,
+    "industry_draft": 407.02242244999997
+  },
+  "area_breakdown": {
+    "total_area": 463601.62,
+    "recharge_worthy_area": 459711.56,
+    "non_recharge_worthy_area": 3890.0600000000004
+  },
+  "rainfall": 620.6298923432553,
+  "losses": 8377.189999999999,
+  "status_assessment": {
+    "overall_status": "safe",
+    "firka_breakdown": {
+      "over_exploited": 1,
+      "semi_critical": 5,
+      "safe": 35
+    },
+    "taluk_breakdown": {
+      "semi_critical": 1,
+      "safe": 9
+    }
+  },
+  "key_metrics": {
+    "extraction_rate_percentage": 27.309065106357632,
+    "recharge_efficiency": 13847.98,
+    "water_balance": {
+      "net_balance": 64761.74,
+      "utilization_rate": 27.31,
+      "safety_margin": 72.69
+    }
+  },
+  "context": "THOOTHUKUDI groundwater assessment shows safe status with 27.309065106357632% extraction rate. Total available groundwater: 77567.54 ha-m. Current utilization focuses on agriculture with 20311.24 ha-m usage. Rainfall contributes 23605.75 ha-m to recharge.",
+  "search_terms": [
+    "thoothukudi",
+    "groundwater assessment",
+    "water resources",
+    "safe category",
+    "aquifer management",
+    "water recharge",
+    "draft analysis",
+    "27% extraction",
+    "sustainable water",
+    "good water status"
+  ],
+  "metadata": {
+    "processing_timestamp": "2024-01-01T00:00:00Z",
+    "data_source": "groundwater_assessment",
+    "format_version": "1.0",
+    "original_data_keys_preserved": true
+  }
+}

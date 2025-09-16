@@ -1,0 +1,121 @@
+{
+  "location": "NAMAKKAL",
+  "category": {
+    "total": "over_exploited",
+    "non_command": "over_exploited"
+  },
+  "stage_of_extraction": {
+    "total": 116.191109172577,
+    "non_command": 133.35631331467405
+  },
+  "water_availability": {
+    "total_availability": 52525.369999999995,
+    "current_availability": 52525.369999999995,
+    "future_availability": 8981.759999999998,
+    "command_area_availability": 6760.900000000001,
+    "non_command_area_availability": 45764.469999999994
+  },
+  "recharge_summary": {
+    "total_recharge": 58269.29,
+    "rainfall_recharge": 25472.77,
+    "agriculture_recharge": 24772.27,
+    "surface_irrigation_recharge": 3842.68,
+    "gw_irrigation_recharge": 20929.59,
+    "canal_recharge": 7512.09
+  },
+  "draft_summary": {
+    "total_draft": 61029.810000000005,
+    "agriculture_draft": 59379.68,
+    "domestic_draft": 1060.911063,
+    "industry_draft": 589.2311300000001,
+    "draft_intensity": 0.2074
+  },
+  "area_breakdown": {
+    "total_area": 294211.83,
+    "recharge_worthy_area": 292810.44000000006,
+    "non_recharge_worthy_area": 1401.3899999999999,
+    "non_command_area": 292810.44000000006
+  },
+  "rainfall": {
+    "total_rainfall": 706.7318921398431,
+    "rainfall_intensity": 0.0024
+  },
+  "losses": {
+    "total_loss": 5743.92,
+    "command_area_loss": 751.19,
+    "non_command_area_loss": 4992.7300000000005
+  },
+  "status_assessment": {
+    "overall_status": "over_exploited",
+    "firka_breakdown": {
+      "over_exploited": 23,
+      "semi_critical": 5,
+      "safe": 4
+    },
+    "taluk_breakdown": {
+      "over_exploited": 5,
+      "semi_critical": 1,
+      "critical": 1,
+      "safe": 1
+    },
+    "critical_zones": {
+      "over_exploited_firkas": 23,
+      "semi_critical_firkas": 5,
+      "safe_firkas": 4,
+      "critical_taluks": 1,
+      "over_exploited_taluks": 5
+    }
+  },
+  "allocation": {
+    "domestic_allocation": 2133.21,
+    "industry_allocation": 0.0,
+    "total_allocation": 2133.21
+  },
+  "key_metrics": {
+    "extraction_rate_percentage": 116.191109172577,
+    "recharge_efficiency": 8244.89,
+    "water_balance": {
+      "net_balance": -8504.44,
+      "utilization_rate": 116.19,
+      "safety_margin": -16.19,
+      "deficit": 2760.52
+    },
+    "sustainability_index": 95.48,
+    "stress_level": "critical_stress"
+  },
+  "alerts_and_warnings": [
+    "CRITICAL: Area classified as over-exploited",
+    "ALERT: Extraction rate 116.191109172577% exceeds recharge",
+    "WARNING: Water deficit of 2760.52 ha-m"
+  ],
+  "context": "NAMAKKAL groundwater assessment shows CRITICAL over_exploited status with 116.191109172577% extraction rate. Total available groundwater: 52,525 ha-m. Water draft exceeds recharge by 2,761 ha-m. Critical situation with 23 over-exploited firkas and 1 critical taluks. Immediate conservation measures required.",
+  "search_terms": [
+    "namakkal",
+    "groundwater crisis",
+    "over exploited aquifer",
+    "water stress",
+    "critical water resources",
+    "over_exploited category",
+    "aquifer depletion",
+    "water conservation urgent",
+    "116% extraction critical",
+    "water emergency",
+    "depletion crisis",
+    "urgent intervention needed"
+  ],
+  "recommendations": [
+    "Immediate implementation of water rationing measures",
+    "Promote drip irrigation and water-efficient agriculture",
+    "Enforce strict regulations on groundwater extraction",
+    "Develop artificial recharge structures",
+    "Implement water recycling and reuse programs",
+    "Conduct awareness campaigns for water conservation"
+  ],
+  "metadata": {
+    "processing_timestamp": "2025-09-11T06:24:27.374321",
+    "data_source": "groundwater_assessment",
+    "format_version": "1.1",
+    "location_uuid": "",
+    "risk_level": "high"
+  }
+}

@@ -1,0 +1,1332 @@
+{
+  "ERODE": {
+    "location": "ERODE",
+    "category": {
+      "total": "semi_critical",
+      "non_command": "critical"
+    },
+    "stage_of_extraction": {
+      "total": 71.40850010601848,
+      "non_command": 94.79349713263535
+    },
+    "water_availability": {
+      "total_availability": 5046.29,
+      "current_availability": 5046.29,
+      "future_availability": 1531.64,
+      "command_area_availability": 1244.89,
+      "non_command_area_availability": 3801.4
+    },
+    "recharge_summary": {
+      "total_recharge": 5606.99,
+      "rainfall_recharge": 955.8499999999999,
+      "agriculture_recharge": 3212.74,
+      "surface_irrigation_recharge": 2344.64,
+      "gw_irrigation_recharge": 868.0999999999999,
+      "canal_recharge": 1383.21
+    },
+    "draft_summary": {
+      "total_draft": 3603.48,
+      "agriculture_draft": 2480.2999999999997,
+      "domestic_draft": 252.4485068,
+      "industry_draft": 870.733031,
+      "draft_intensity": 0.2029
+    },
+    "area_breakdown": {
+      "total_area": 17763.190000000002,
+      "recharge_worthy_area": 17763.190000000002,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 17763.190000000002
+    },
+    "rainfall": {
+      "total_rainfall": 714.1845230783433,
+      "rainfall_intensity": 0.0402
+    },
+    "losses": {
+      "total_loss": 560.7,
+      "command_area_loss": 138.32,
+      "non_command_area_loss": 422.38
+    },
+    "status_assessment": {
+      "overall_status": "semi_critical",
+      "firka_breakdown": {
+        "semi_critical": 2,
+        "safe": 1
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 0,
+        "semi_critical_firkas": 2,
+        "safe_firkas": 1
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 1137.66,
+      "industry_allocation": 0.0,
+      "total_allocation": 1137.66
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 71.40850010601848,
+      "recharge_efficiency": 785.09,
+      "water_balance": {
+        "net_balance": 1442.81,
+        "utilization_rate": 71.41,
+        "safety_margin": 28.59,
+        "deficit": 0
+      },
+      "sustainability_index": 155.6,
+      "stress_level": "moderate_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "ERODE groundwater assessment shows SEMI_CRITICAL status with 71.40850010601848% extraction rate. Total available groundwater: 5,046 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 0 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "erode",
+      "groundwater assessment",
+      "water resources",
+      "semi_critical category",
+      "aquifer management",
+      "71% extraction"
+    ],
+    "recommendations": [
+      "Continue monitoring groundwater levels",
+      "Promote sustainable water use practices",
+      "Plan for future water needs"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "0d2bb48a-8e6f-493d-89f1-db6ec463a3af",
+      "risk_level": "moderate"
+    }
+  },
+  "SATHYAMANGALAM": {
+    "location": "SATHYAMANGALAM",
+    "category": {
+      "total": "critical",
+      "non_command": "over_exploited"
+    },
+    "stage_of_extraction": {
+      "total": 94.95595870747053,
+      "non_command": 111.76164402470867
+    },
+    "water_availability": {
+      "total_availability": 8185.5,
+      "current_availability": 8185.5,
+      "future_availability": 1842.7600000000002,
+      "command_area_availability": 1230.8600000000001,
+      "non_command_area_availability": 6954.64
+    },
+    "recharge_summary": {
+      "total_recharge": 8903.789999999999,
+      "rainfall_recharge": 2845.8,
+      "agriculture_recharge": 4286.28,
+      "surface_irrigation_recharge": 1619.21,
+      "gw_irrigation_recharge": 2667.07,
+      "canal_recharge": 1367.63
+    },
+    "draft_summary": {
+      "total_draft": 7772.62,
+      "agriculture_draft": 7620.199999999999,
+      "domestic_draft": 85.0209855,
+      "industry_draft": 67.4,
+      "draft_intensity": 0.1514
+    },
+    "area_breakdown": {
+      "total_area": 51328.865000000005,
+      "recharge_worthy_area": 51328.865000000005,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 51328.865000000005
+    },
+    "rainfall": {
+      "total_rainfall": 792.1480503416549,
+      "rainfall_intensity": 0.0154
+    },
+    "losses": {
+      "total_loss": 718.28,
+      "command_area_loss": 136.76999999999998,
+      "non_command_area_loss": 581.52
+    },
+    "status_assessment": {
+      "overall_status": "critical",
+      "firka_breakdown": {
+        "over_exploited": 3,
+        "semi_critical": 1,
+        "safe": 1
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 3,
+        "semi_critical_firkas": 1,
+        "safe_firkas": 1
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 398.42,
+      "industry_allocation": 0.0,
+      "total_allocation": 398.42
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 94.95595870747053,
+      "recharge_efficiency": 1124.01,
+      "water_balance": {
+        "net_balance": 412.89,
+        "utilization_rate": 94.96,
+        "safety_margin": 5.04,
+        "deficit": 0
+      },
+      "sustainability_index": 114.55,
+      "stress_level": "high_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "SATHYAMANGALAM groundwater assessment shows CRITICAL status with 94.95595870747053% extraction rate. Total available groundwater: 8,186 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 3 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "sathyamangalam",
+      "groundwater assessment",
+      "water resources",
+      "critical category",
+      "aquifer management",
+      "94% extraction"
+    ],
+    "recommendations": [
+      "Monitor groundwater levels closely",
+      "Implement controlled extraction policies",
+      "Promote water-saving technologies",
+      "Develop watershed management plans"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "c3681273-6adf-4e4f-a601-9a5b1e17bad8",
+      "risk_level": "high"
+    }
+  },
+  "MODAKURICHI": {
+    "location": "MODAKURICHI",
+    "category": {
+      "total": "semi_critical",
+      "non_command": "semi_critical"
+    },
+    "stage_of_extraction": {
+      "total": 77.05110295553764,
+      "non_command": 81.77514512545294
+    },
+    "water_availability": {
+      "total_availability": 10752.02,
+      "current_availability": 10752.02,
+      "future_availability": 2402.01,
+      "command_area_availability": 621.13,
+      "non_command_area_availability": 10130.89
+    },
+    "recharge_summary": {
+      "total_recharge": 11946.689999999999,
+      "rainfall_recharge": 1332.96,
+      "agriculture_recharge": 9846.990000000002,
+      "surface_irrigation_recharge": 7000.3,
+      "gw_irrigation_recharge": 2846.69,
+      "canal_recharge": 690.14
+    },
+    "draft_summary": {
+      "total_draft": 8284.55,
+      "agriculture_draft": 8133.4,
+      "domestic_draft": 126.9825965,
+      "industry_draft": 24.16796,
+      "draft_intensity": 0.2374
+    },
+    "area_breakdown": {
+      "total_area": 34889.75,
+      "recharge_worthy_area": 34451.75,
+      "non_recharge_worthy_area": 438.0,
+      "non_command_area": 34451.75
+    },
+    "rainfall": {
+      "total_rainfall": 604.5423281691061,
+      "rainfall_intensity": 0.0173
+    },
+    "losses": {
+      "total_loss": 1194.67,
+      "command_area_loss": 69.00999999999999,
+      "non_command_area_loss": 1125.66
+    },
+    "status_assessment": {
+      "overall_status": "semi_critical",
+      "firka_breakdown": {
+        "semi_critical": 1,
+        "critical": 1,
+        "safe": 1
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 0,
+        "semi_critical_firkas": 1,
+        "safe_firkas": 1
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 293.13,
+      "industry_allocation": 0.0,
+      "total_allocation": 293.13
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 77.05110295553764,
+      "recharge_efficiency": 1976.15,
+      "water_balance": {
+        "net_balance": 2467.47,
+        "utilization_rate": 77.05,
+        "safety_margin": 22.95,
+        "deficit": 0
+      },
+      "sustainability_index": 144.2,
+      "stress_level": "moderate_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "MODAKURICHI groundwater assessment shows SEMI_CRITICAL status with 77.05110295553764% extraction rate. Total available groundwater: 10,752 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 0 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "modakurichi",
+      "groundwater assessment",
+      "water resources",
+      "semi_critical category",
+      "aquifer management",
+      "77% extraction"
+    ],
+    "recommendations": [
+      "Continue monitoring groundwater levels",
+      "Promote sustainable water use practices",
+      "Plan for future water needs"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "59a671fc-3d78-4f62-91a9-2ab64ec4c41c",
+      "risk_level": "moderate"
+    }
+  },
+  "NAMBIYUR": {
+    "location": "NAMBIYUR",
+    "category": {
+      "total": "over_exploited",
+      "non_command": "over_exploited"
+    },
+    "stage_of_extraction": {
+      "total": 171.44239254959354,
+      "non_command": 184.96227039941334
+    },
+    "water_availability": {
+      "total_availability": 3648.66,
+      "current_availability": 3648.66,
+      "future_availability": 266.7,
+      "command_area_availability": 266.7,
+      "non_command_area_availability": 3381.96
+    },
+    "recharge_summary": {
+      "total_recharge": 4054.08,
+      "rainfall_recharge": 1030.8899999999999,
+      "agriculture_recharge": 2389.66,
+      "surface_irrigation_recharge": 217.59,
+      "gw_irrigation_recharge": 2172.0699999999997,
+      "canal_recharge": 296.34000000000003
+    },
+    "draft_summary": {
+      "total_draft": 6255.349999999999,
+      "agriculture_draft": 6205.9,
+      "domestic_draft": 37.65,
+      "industry_draft": 11.799999999999999,
+      "draft_intensity": 0.2186
+    },
+    "area_breakdown": {
+      "total_area": 28615.705,
+      "recharge_worthy_area": 28615.705,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 28615.705
+    },
+    "rainfall": {
+      "total_rainfall": 593.0638402932934,
+      "rainfall_intensity": 0.0207
+    },
+    "losses": {
+      "total_loss": 405.42,
+      "command_area_loss": 29.64,
+      "non_command_area_loss": 375.78000000000003
+    },
+    "status_assessment": {
+      "overall_status": "over_exploited",
+      "firka_breakdown": {
+        "over_exploited": 3
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 3,
+        "semi_critical_firkas": 0,
+        "safe_firkas": 0
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 181.2,
+      "industry_allocation": 0.0,
+      "total_allocation": 181.2
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 171.44239254959354,
+      "recharge_efficiency": 683.58,
+      "water_balance": {
+        "net_balance": -2606.69,
+        "utilization_rate": 171.44,
+        "safety_margin": -71.44,
+        "deficit": 2201.27
+      },
+      "sustainability_index": 64.81,
+      "stress_level": "critical_stress"
+    },
+    "alerts_and_warnings": [
+      "CRITICAL: Area classified as over-exploited",
+      "ALERT: Extraction rate 171.44239254959354% exceeds recharge",
+      "WARNING: Water deficit of 2201.27 ha-m"
+    ],
+    "context": "NAMBIYUR groundwater assessment shows OVER_EXPLOITED status with 171.44239254959354% extraction rate. Total available groundwater: 3,649 ha-m. Water draft exceeds recharge by 2,201 ha-m. Critical situation with 3 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "nambiyur",
+      "groundwater assessment",
+      "water resources",
+      "over_exploited category",
+      "aquifer management",
+      "171% extraction",
+      "water emergency",
+      "depletion crisis",
+      "urgent intervention needed"
+    ],
+    "recommendations": [
+      "Implement water rationing measures",
+      "Promote drip irrigation and water-efficient agriculture",
+      "Enforce regulations on groundwater extraction",
+      "Develop artificial recharge structures",
+      "Implement water recycling and reuse programs",
+      "Conduct awareness campaigns for water conservation"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "8beb2b85-448a-450b-866d-9b5c8684cf29",
+      "risk_level": "high"
+    }
+  },
+  "BHAVANI": {
+    "location": "BHAVANI",
+    "category": {
+      "total": "safe",
+      "non_command": "safe"
+    },
+    "stage_of_extraction": {
+      "total": 42.468232664926056,
+      "non_command": 63.63644686502151
+    },
+    "water_availability": {
+      "total_availability": 14730.54,
+      "current_availability": 14730.54,
+      "future_availability": 8141.35,
+      "command_area_availability": 4900.01,
+      "non_command_area_availability": 9830.53
+    },
+    "recharge_summary": {
+      "total_recharge": 16367.29,
+      "rainfall_recharge": 2194.59,
+      "agriculture_recharge": 8583.58,
+      "surface_irrigation_recharge": 6459.389999999999,
+      "gw_irrigation_recharge": 2124.19,
+      "canal_recharge": 5444.469999999999
+    },
+    "draft_summary": {
+      "total_draft": 6255.799999999999,
+      "agriculture_draft": 6069.099999999999,
+      "domestic_draft": 51.519999999999996,
+      "industry_draft": 135.17883999999995,
+      "draft_intensity": 0.2002
+    },
+    "area_breakdown": {
+      "total_area": 31249.009999999995,
+      "recharge_worthy_area": 31249.009999999995,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 31249.009999999995
+    },
+    "rainfall": {
+      "total_rainfall": 801.5426519432136,
+      "rainfall_intensity": 0.0257
+    },
+    "losses": {
+      "total_loss": 1636.75,
+      "command_area_loss": 544.46,
+      "non_command_area_loss": 1092.29
+    },
+    "status_assessment": {
+      "overall_status": "safe",
+      "firka_breakdown": {
+        "safe": 3
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 0,
+        "semi_critical_firkas": 0,
+        "safe_firkas": 3
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 384.91,
+      "industry_allocation": 0.0,
+      "total_allocation": 384.91
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 42.468232664926056,
+      "recharge_efficiency": 2041.97,
+      "water_balance": {
+        "net_balance": 8474.74,
+        "utilization_rate": 42.47,
+        "safety_margin": 57.53,
+        "deficit": 0
+      },
+      "sustainability_index": 261.63,
+      "stress_level": "low_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "BHAVANI groundwater assessment shows SAFE status with 42.468232664926056% extraction rate. Total available groundwater: 14,731 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 0 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "bhavani",
+      "groundwater assessment",
+      "water resources",
+      "safe category",
+      "aquifer management",
+      "42% extraction"
+    ],
+    "recommendations": [
+      "Continue monitoring groundwater levels",
+      "Promote sustainable water use practices",
+      "Plan for future water needs"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "bf9e7551-a161-40b0-ba59-8e179313927a",
+      "risk_level": "moderate"
+    }
+  },
+  "KODUMUDI": {
+    "location": "KODUMUDI",
+    "category": {
+      "total": "semi_critical",
+      "non_command": "semi_critical"
+    },
+    "stage_of_extraction": {
+      "total": 74.38088849876802,
+      "non_command": 85.14575879976918
+    },
+    "water_availability": {
+      "total_availability": 7439.289999999999,
+      "current_availability": 7439.290000000001,
+      "future_availability": 1754.8,
+      "command_area_availability": 940.54,
+      "non_command_area_availability": 6498.75
+    },
+    "recharge_summary": {
+      "total_recharge": 8265.880000000001,
+      "rainfall_recharge": 807.88,
+      "agriculture_recharge": 6346.2300000000005,
+      "surface_irrigation_recharge": 4425.96,
+      "gw_irrigation_recharge": 1920.27,
+      "canal_recharge": 1045.05
+    },
+    "draft_summary": {
+      "total_draft": 5533.41,
+      "agriculture_draft": 5486.5,
+      "domestic_draft": 26.21,
+      "industry_draft": 20.70414,
+      "draft_intensity": 0.2452
+    },
+    "area_breakdown": {
+      "total_area": 22563.585000000003,
+      "recharge_worthy_area": 22563.585000000003,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 22563.585000000003
+    },
+    "rainfall": {
+      "total_rainfall": 559.4491719733367,
+      "rainfall_intensity": 0.0248
+    },
+    "losses": {
+      "total_loss": 826.5899999999999,
+      "command_area_loss": 104.50999999999999,
+      "non_command_area_loss": 722.08
+    },
+    "status_assessment": {
+      "overall_status": "semi_critical",
+      "firka_breakdown": {
+        "semi_critical": 3
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 0,
+        "semi_critical_firkas": 3,
+        "safe_firkas": 0
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 177.29000000000002,
+      "industry_allocation": 0.0,
+      "total_allocation": 177.29000000000002
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 74.38088849876802,
+      "recharge_efficiency": 1477.5,
+      "water_balance": {
+        "net_balance": 1905.88,
+        "utilization_rate": 74.38,
+        "safety_margin": 25.62,
+        "deficit": 0
+      },
+      "sustainability_index": 149.38,
+      "stress_level": "moderate_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "KODUMUDI groundwater assessment shows SEMI_CRITICAL status with 74.38088849876802% extraction rate. Total available groundwater: 7,439 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 0 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "kodumudi",
+      "groundwater assessment",
+      "water resources",
+      "semi_critical category",
+      "aquifer management",
+      "74% extraction"
+    ],
+    "recommendations": [
+      "Continue monitoring groundwater levels",
+      "Promote sustainable water use practices",
+      "Plan for future water needs"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "55b61362-2a37-498f-92cd-dc29cc6ea466",
+      "risk_level": "moderate"
+    }
+  },
+  "THALAVADI": {
+    "location": "THALAVADI",
+    "category": {
+      "total": "safe",
+      "non_command": "semi_critical"
+    },
+    "stage_of_extraction": {
+      "total": 62.63580796948523,
+      "non_command": 71.41393077389229
+    },
+    "water_availability": {
+      "total_availability": 2558.76,
+      "current_availability": 2558.7599999999998,
+      "future_availability": 855.91,
+      "command_area_availability": 314.52,
+      "non_command_area_availability": 2244.24
+    },
+    "recharge_summary": {
+      "total_recharge": 2843.0699999999997,
+      "rainfall_recharge": 1783.4499999999998,
+      "agriculture_recharge": 554.15,
+      "surface_irrigation_recharge": 0.0,
+      "gw_irrigation_recharge": 554.15,
+      "canal_recharge": 349.47
+    },
+    "draft_summary": {
+      "total_draft": 1602.7,
+      "agriculture_draft": 1583.3,
+      "domestic_draft": 13.100000000000001,
+      "industry_draft": 6.3,
+      "draft_intensity": 0.0742
+    },
+    "area_breakdown": {
+      "total_area": 21594.3,
+      "recharge_worthy_area": 21594.3,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 21594.3
+    },
+    "rainfall": {
+      "total_rainfall": 755.9,
+      "rainfall_intensity": 0.035
+    },
+    "losses": {
+      "total_loss": 284.31,
+      "command_area_loss": 34.95,
+      "non_command_area_loss": 249.36
+    },
+    "status_assessment": {
+      "overall_status": "safe",
+      "firka_breakdown": {
+        "safe": 1
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 0,
+        "semi_critical_firkas": 0,
+        "safe_firkas": 1
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 113.25,
+      "industry_allocation": 0.0,
+      "total_allocation": 113.25
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 62.63580796948523,
+      "recharge_efficiency": 376.12,
+      "water_balance": {
+        "net_balance": 956.06,
+        "utilization_rate": 62.64,
+        "safety_margin": 37.36,
+        "deficit": 0
+      },
+      "sustainability_index": 177.39,
+      "stress_level": "low_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "THALAVADI groundwater assessment shows SAFE status with 62.63580796948523% extraction rate. Total available groundwater: 2,559 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 0 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "thalavadi",
+      "groundwater assessment",
+      "water resources",
+      "safe category",
+      "aquifer management",
+      "62% extraction"
+    ],
+    "recommendations": [
+      "Continue monitoring groundwater levels",
+      "Promote sustainable water use practices",
+      "Plan for future water needs"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "fd215d79-f679-4c7f-a1d2-20df56433a1a",
+      "risk_level": "moderate"
+    }
+  },
+  "ANTHIYUR": {
+    "location": "ANTHIYUR",
+    "category": {
+      "total": "semi_critical",
+      "non_command": "over_exploited"
+    },
+    "stage_of_extraction": {
+      "total": 83.96068881789319,
+      "non_command": 115.35117897178199
+    },
+    "water_availability": {
+      "total_availability": 7108.41,
+      "current_availability": 7108.41,
+      "future_availability": 2190.22,
+      "command_area_availability": 1934.41,
+      "non_command_area_availability": 5174.0
+    },
+    "recharge_summary": {
+      "total_recharge": 7898.209999999999,
+      "rainfall_recharge": 1802.09,
+      "agriculture_recharge": 3581.9999999999995,
+      "surface_irrigation_recharge": 1562.4899999999998,
+      "gw_irrigation_recharge": 2019.5100000000002,
+      "canal_recharge": 2149.33
+    },
+    "draft_summary": {
+      "total_draft": 5968.27,
+      "agriculture_draft": 5770.0,
+      "domestic_draft": 172.405294,
+      "industry_draft": 25.8655,
+      "draft_intensity": 0.1471
+    },
+    "area_breakdown": {
+      "total_area": 40575.115,
+      "recharge_worthy_area": 40575.115,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 40575.115
+    },
+    "rainfall": {
+      "total_rainfall": 746.0083798776664,
+      "rainfall_intensity": 0.0184
+    },
+    "losses": {
+      "total_loss": 789.8000000000001,
+      "command_area_loss": 214.92000000000002,
+      "non_command_area_loss": 574.88
+    },
+    "status_assessment": {
+      "overall_status": "semi_critical",
+      "firka_breakdown": {
+        "over_exploited": 1,
+        "semi_critical": 2,
+        "safe": 1
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 1,
+        "semi_critical_firkas": 2,
+        "safe_firkas": 1
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 409.16,
+      "industry_allocation": 0.0,
+      "total_allocation": 409.16
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 83.96068881789319,
+      "recharge_efficiency": 1058.73,
+      "water_balance": {
+        "net_balance": 1140.14,
+        "utilization_rate": 83.96,
+        "safety_margin": 16.04,
+        "deficit": 0
+      },
+      "sustainability_index": 132.34,
+      "stress_level": "moderate_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "ANTHIYUR groundwater assessment shows SEMI_CRITICAL status with 83.96068881789319% extraction rate. Total available groundwater: 7,108 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 1 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "anthiyur",
+      "groundwater assessment",
+      "water resources",
+      "semi_critical category",
+      "aquifer management",
+      "83% extraction"
+    ],
+    "recommendations": [
+      "Continue monitoring groundwater levels",
+      "Promote sustainable water use practices",
+      "Plan for future water needs"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "5cb44039-da84-4421-8588-1f73e77db9fa",
+      "risk_level": "moderate"
+    }
+  },
+  "GOBICHETTIPALAYAM": {
+    "location": "GOBICHETTIPALAYAM",
+    "category": {
+      "total": "safe",
+      "non_command": "safe"
+    },
+    "stage_of_extraction": {
+      "total": 51.902346165426195,
+      "non_command": 60.869796325629935
+    },
+    "water_availability": {
+      "total_availability": 15444.35,
+      "current_availability": 15444.35,
+      "future_availability": 7525.5199999999995,
+      "command_area_availability": 2275.29,
+      "non_command_area_availability": 13169.060000000001
+    },
+    "recharge_summary": {
+      "total_recharge": 17160.379999999997,
+      "rainfall_recharge": 2027.6799999999998,
+      "agriculture_recharge": 12424.500000000002,
+      "surface_irrigation_recharge": 9643.99,
+      "gw_irrigation_recharge": 2780.51,
+      "canal_recharge": 2528.0899999999997
+    },
+    "draft_summary": {
+      "total_draft": 8015.980000000001,
+      "agriculture_draft": 7944.3,
+      "domestic_draft": 62.09,
+      "industry_draft": 9.588999999999999,
+      "draft_intensity": 0.1934
+    },
+    "area_breakdown": {
+      "total_area": 41455.695,
+      "recharge_worthy_area": 41455.695,
+      "non_recharge_worthy_area": 0.0,
+      "non_command_area": 41455.695
+    },
+    "rainfall": {
+      "total_rainfall": 764.2475905421437,
+      "rainfall_intensity": 0.0184
+    },
+    "losses": {
+      "total_loss": 1716.03,
+      "command_area_loss": 252.8,
+      "non_command_area_loss": 1463.23
+    },
+    "status_assessment": {
+      "overall_status": "safe",
+      "firka_breakdown": {
+        "over_exploited": 1,
+        "safe": 4
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 1,
+        "semi_critical_firkas": 0,
+        "safe_firkas": 4
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 390.71999999999997,
+      "industry_allocation": 0.0,
+      "total_allocation": 390.71999999999997
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 51.902346165426195,
+      "recharge_efficiency": 2245.4,
+      "water_balance": {
+        "net_balance": 7428.37,
+        "utilization_rate": 51.9,
+        "safety_margin": 48.1,
+        "deficit": 0
+      },
+      "sustainability_index": 214.08,
+      "stress_level": "low_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "GOBICHETTIPALAYAM groundwater assessment shows SAFE status with 51.902346165426195% extraction rate. Total available groundwater: 15,444 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 1 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "gobichettipalayam",
+      "groundwater assessment",
+      "water resources",
+      "safe category",
+      "aquifer management",
+      "51% extraction"
+    ],
+    "recommendations": [
+      "Continue monitoring groundwater levels",
+      "Promote sustainable water use practices",
+      "Plan for future water needs"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "9b33f0eb-d72e-44b2-a846-32be12fe329c",
+      "risk_level": "moderate"
+    }
+  },
+  "PERUNDURAI": {
+    "location": "PERUNDURAI",
+    "category": {
+      "total": "critical",
+      "non_command": "over_exploited"
+    },
+    "stage_of_extraction": {
+      "total": 92.11365025304325,
+      "non_command": 123.70492613445825
+    },
+    "water_availability": {
+      "total_availability": 10652.33,
+      "current_availability": 10652.329999999998,
+      "future_availability": 2735.88,
+      "command_area_availability": 2720.35,
+      "non_command_area_availability": 7931.98
+    },
+    "recharge_summary": {
+      "total_recharge": 11835.92,
+      "rainfall_recharge": 2911.1800000000003,
+      "agriculture_recharge": 5466.29,
+      "surface_irrigation_recharge": 2075.23,
+      "gw_irrigation_recharge": 3391.06,
+      "canal_recharge": 3022.61
+    },
+    "draft_summary": {
+      "total_draft": 9812.25,
+      "agriculture_draft": 9688.7,
+      "domestic_draft": 97.49000000000001,
+      "industry_draft": 26.07304,
+      "draft_intensity": 0.17
+    },
+    "area_breakdown": {
+      "total_area": 57729.905000000006,
+      "recharge_worthy_area": 56742.905000000006,
+      "non_recharge_worthy_area": 987.0,
+      "non_command_area": 56742.905000000006
+    },
+    "rainfall": {
+      "total_rainfall": 704.3293050999062,
+      "rainfall_intensity": 0.0122
+    },
+    "losses": {
+      "total_loss": 1183.59,
+      "command_area_loss": 302.26,
+      "non_command_area_loss": 881.3299999999999
+    },
+    "status_assessment": {
+      "overall_status": "critical",
+      "firka_breakdown": {
+        "over_exploited": 4,
+        "safe": 1
+      },
+      "critical_zones": {
+        "over_exploited_firkas": 4,
+        "semi_critical_firkas": 0,
+        "safe_firkas": 1
+      }
+    },
+    "allocation": {
+      "domestic_allocation": 775.89,
+      "industry_allocation": 0.0,
+      "total_allocation": 775.89
+    },
+    "key_metrics": {
+      "extraction_rate_percentage": 92.11365025304325,
+      "recharge_efficiency": 1680.45,
+      "water_balance": {
+        "net_balance": 840.08,
+        "utilization_rate": 92.11,
+        "safety_margin": 7.89,
+        "deficit": 0
+      },
+      "sustainability_index": 120.62,
+      "stress_level": "high_stress"
+    },
+    "alerts_and_warnings": [],
+    "context": "PERUNDURAI groundwater assessment shows CRITICAL status with 92.11365025304325% extraction rate. Total available groundwater: 10,652 ha-m. Water draft exceeds recharge by 0 ha-m. Critical situation with 4 over-exploited firkas. Immediate conservation measures required.",
+    "search_terms": [
+      "perundurai",
+      "groundwater assessment",
+      "water resources",
+      "critical category",
+      "aquifer management",
+      "92% extraction"
+    ],
+    "recommendations": [
+      "Monitor groundwater levels closely",
+      "Implement controlled extraction policies",
+      "Promote water-saving technologies",
+      "Develop watershed management plans"
+    ],
+    "metadata": {
+      "processing_timestamp": "2025-09-11T13:37:12.175891",
+      "data_source": "groundwater_assessment",
+      "format_version": "1.1",
+      "location_uuid": "8305ece9-7abc-41ef-9188-c39ad8f2b23a",
+      "risk_level": "high"
+    }
+  },
+  "total": {
+    "error": "Processing failed: 'NoneType' object has no attribute 'get'",
+    "original_data": {
+      "locationName": "total",
+      "area": {
+        "non_recharge_worthy": {
+          "commandArea": 0.0,
+          "nonCommandArea": 0.0,
+          "poorQualityArea": 0.0,
+          "hillyArea": 0.0,
+          "forestArea": 0.0,
+          "totalArea": 1425.0,
+          "pavedArea": 0.0,
+          "unpavedArea": 0.0
+        },
+        "total": {
+          "commandArea": 0.0,
+          "nonCommandArea": 346340.12000000005,
+          "poorQualityArea": 0.0,
+          "hillyArea": 0.0,
+          "forestArea": 0.0,
+          "totalArea": 347765.12000000005,
+          "pavedArea": 0.0,
+          "unpavedArea": 0.0
+        },
+        "recharge_worthy": {
+          "commandArea": 0.0,
+          "nonCommandArea": 346340.12000000005,
+          "poorQualityArea": 0.0,
+          "hillyArea": 0.0,
+          "forestArea": 0.0,
+          "totalArea": 346340.12000000005,
+          "pavedArea": 0.0,
+          "unpavedArea": 0.0
+        }
+      },
+      "loss": {
+        "poor_quality": 0.0,
+        "total": 9316.140000000001,
+        "non_command": 7488.51,
+        "command": 1827.6399999999999
+      },
+      "category": null,
+      "reportSummary": {
+        "8beb2b85-448a-450b-866d-9b5c8684cf29": {
+          "FIRKA": {
+            "over_exploited": 3
+          },
+          "TALUK": {
+            "over_exploited": 1
+          }
+        },
+        "59a671fc-3d78-4f62-91a9-2ab64ec4c41c": {
+          "FIRKA": {
+            "semi_critical": 1,
+            "critical": 1,
+            "safe": 1
+          },
+          "TALUK": {
+            "semi_critical": 1
+          }
+        },
+        "55b61362-2a37-498f-92cd-dc29cc6ea466": {
+          "FIRKA": {
+            "semi_critical": 3
+          },
+          "TALUK": {
+            "semi_critical": 1
+          }
+        },
+        "total": {
+          "FIRKA": {
+            "over_exploited": 12,
+            "semi_critical": 9,
+            "critical": 1,
+            "safe": 13
+          },
+          "TALUK": {
+            "over_exploited": 1,
+            "semi_critical": 4,
+            "critical": 2,
+            "safe": 3
+          }
+        },
+        "fd215d79-f679-4c7f-a1d2-20df56433a1a": {
+          "FIRKA": {
+            "safe": 1
+          },
+          "TALUK": {
+            "safe": 1
+          }
+        },
+        "0d2bb48a-8e6f-493d-89f1-db6ec463a3af": {
+          "FIRKA": {
+            "semi_critical": 2,
+            "safe": 1
+          },
+          "TALUK": {
+            "semi_critical": 1
+          }
+        },
+        "c3681273-6adf-4e4f-a601-9a5b1e17bad8": {
+          "FIRKA": {
+            "over_exploited": 3,
+            "semi_critical": 1,
+            "safe": 1
+          },
+          "TALUK": {
+            "critical": 1
+          }
+        },
+        "bf9e7551-a161-40b0-ba59-8e179313927a": {
+          "FIRKA": {
+            "safe": 3
+          },
+          "TALUK": {
+            "safe": 1
+          }
+        },
+        "8305ece9-7abc-41ef-9188-c39ad8f2b23a": {
+          "FIRKA": {
+            "over_exploited": 4,
+            "safe": 1
+          },
+          "TALUK": {
+            "critical": 1
+          }
+        },
+        "5cb44039-da84-4421-8588-1f73e77db9fa": {
+          "FIRKA": {
+            "over_exploited": 1,
+            "semi_critical": 2,
+            "safe": 1
+          },
+          "TALUK": {
+            "semi_critical": 1
+          }
+        },
+        "9b33f0eb-d72e-44b2-a846-32be12fe329c": {
+          "FIRKA": {
+            "over_exploited": 1,
+            "safe": 4
+          },
+          "TALUK": {
+            "safe": 1
+          }
+        }
+      },
+      "gwProjectedUtilAllocationDynamicAquifer": {
+        "domestic": {
+          "total": 0.0
+        },
+        "total": {
+          "total": 0.0
+        }
+      },
+      "additionalRecharge": {},
+      "staticGWResource": {
+        "poor_quality": 0.0,
+        "total": 0.0,
+        "non_command": 0.0,
+        "command": 0.0
+      },
+      "totalGWAvailability": {
+        "poor_quality": 0.0,
+        "total": 85566.15000000001,
+        "non_command": 69117.45,
+        "command": 16448.7
+      },
+      "aquiferBusinessData": {
+        "SemiConfined Aquifer Piezo Data": null,
+        "confined_aquifer": {
+          "total": {
+            "total": 0.0
+          },
+          "in_storage_gw": {
+            "in_storage_gw": 0.0
+          },
+          "dynamic_gw": {
+            "dynamic_gw": 0.0
+          }
+        }
+      },
+      "coastalBusinessData": null,
+      "waterDepletedZonesBusinessData": null,
+      "inOutFlow": {
+        "total": 0.0
+      },
+      "baseFlow": {
+        "total": {
+          "lateral_aquifer": 0.0,
+          "vertcal_aquifer": 0.0
+        }
+      },
+      "streamRecharge": null,
+      "additionalbaseflow": null,
+      "envFlows": null,
+      "subject": null,
+      "action": null,
+      "modifiable": null,
+      "isUrban": null,
+      "gwSpecificYield": null,
+      "geology": null,
+      "evaporation": {},
+      "qualityTagging": null,
+      "approvalLevel": null,
+      "verificStatus": null,
+      "timeStamp": null,
+      "locationUUID": null,
+      "rainfall": {
+        "poor_quality": 0.0,
+        "total": 713.333306867538,
+        "non_command": 713.333306867538,
+        "command": 0.0
+      },
+      "wtfonly": null,
+      "computationSummary": null,
+      "rechargeData": {
+        "agriculture": {
+          "poor_quality": 0.0,
+          "total": 56692.420000000006,
+          "non_command": 56692.420000000006,
+          "command": 0.0
+        },
+        "rainfall": {
+          "poor_quality": 0.0,
+          "total": 17692.370000000003,
+          "non_command": 17692.370000000003,
+          "command": 0.0
+        },
+        "total": {
+          "poor_quality": 0.0,
+          "total": 94882.29999999999,
+          "non_command": 76605.95999999999,
+          "command": 18276.34
+        },
+        "surface_irrigation": {
+          "poor_quality": 0.0,
+          "total": 35348.8,
+          "non_command": 35348.8,
+          "command": 0.0
+        },
+        "gw_irrigation": {
+          "poor_quality": 0.0,
+          "total": 21343.620000000003,
+          "non_command": 21343.620000000003,
+          "command": 0.0
+        },
+        "water_body": {
+          "poor_quality": 0.0,
+          "total": 358.88000000000005,
+          "non_command": 358.88000000000005,
+          "command": 0.0
+        },
+        "canal": {
+          "poor_quality": 0.0,
+          "total": 18276.34,
+          "command": 18276.34
+        },
+        "artificial_structure": {
+          "poor_quality": 0.0,
+          "total": 1862.2959999999998,
+          "non_command": 1862.2959999999998,
+          "command": 0.0
+        }
+      },
+      "draftData": {
+        "agriculture": {
+          "total": 60981.7,
+          "non_command": 60981.7
+        },
+        "domestic": {
+          "total": 924.9173828,
+          "non_command": 924.9173828
+        },
+        "total": {
+          "total": 63104.41000000001,
+          "non_command": 63104.41000000001
+        },
+        "industry": {
+          "total": 1197.8115109999999,
+          "non_command": 1197.8115109999999
+        }
+      },
+      "currentAvailabilityForAllPurposes": {
+        "poor_quality": 0.0,
+        "total": 85566.15000000001,
+        "non_command": 69117.45,
+        "command": 16448.7
+      },
+      "availabilityForFutureUse": {
+        "poor_quality": 0.0,
+        "total": 29246.79,
+        "non_command": 12798.09,
+        "command": 16448.7
+      },
+      "gwallocation": {
+        "domestic": {
+          "poor_quality": 0.0,
+          "total": 4261.63,
+          "non_command": 4261.63,
+          "command": 0.0
+        },
+        "total": {
+          "poor_quality": 0.0,
+          "total": 4261.63,
+          "non_command": 4261.63,
+          "command": 0.0
+        },
+        "industry": {
+          "poor_quality": 0.0,
+          "total": 0.0
+        }
+      },
+      "stageOfExtraction": {
+        "poor_quality": 0.0,
+        "total": 73.74926884054034,
+        "non_command": 91.30025774967106,
+        "command": 0.0
+      },
+      "gwlevelData": null,
+      "gwanalysisSeason": null,
+      "gwtrendSlope": null,
+      "waterTableRiseFall": null,
+      "gwtrendAttention": null,
+      "waterTableCategory": null,
+      "message": null
+    }
+  }
+}
