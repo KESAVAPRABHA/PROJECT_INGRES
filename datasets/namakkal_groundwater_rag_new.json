@@ -1,0 +1,134 @@
+{
+  "location": {
+    "district": "NAMAKKAL",
+    "state": "Tamil Nadu",
+    "region": "Western",
+    "total_area_sq_km": 3363,
+    "population": 1726601,
+    "taluks": ["Namakkal", "Rasipuram", "Tiruchengode", "Paramathi-Velur", "Sendamangalam", "Kolli Hills"],
+    "coordinates": {
+      "latitude": "11.2189° N",
+      "longitude": "78.1674° E"
+    }
+  },
+  "groundwater_status": {
+    "category": "over_exploited",
+    "non_command_category": "over_exploited",
+    "extraction_rate": 116.19,
+    "non_command_extraction_rate": 133.36,
+    "stress_level": "critical_stress",
+    "sustainability_index": 95.48
+  },
+  "water_resources": {
+    "total_availability": 52525.37,
+    "current_availability": 52525.37,
+    "future_projected": 8981.76,
+    "command_area": 6760.90,
+    "non_command_area": 45764.47,
+    "total_recharge": 58269.29,
+    "total_draft": 61029.81,
+    "water_deficit": 2760.52,
+    "net_water_balance": -8504.44
+  },
+  "recharge_sources": {
+    "rainfall": 25472.77,
+    "agriculture": 24772.27,
+    "surface_irrigation": 3842.68,
+    "groundwater_irrigation": 20929.59,
+    "canal": 7512.09,
+    "total": 58269.29
+  },
+  "water_usage": {
+    "agriculture_draft": 59379.68,
+    "domestic_draft": 1060.91,
+    "industrial_draft": 589.23,
+    "total_draft": 61029.81,
+    "draft_intensity": 0.2074
+  },
+  "area_classification": {
+    "total_area": 294211.83,
+    "recharge_worthy": 292810.44,
+    "non_recharge_worthy": 1401.39,
+    "command_area": 6760.90,
+    "non_command_area": 292810.44
+  },
+  "rainfall_data": {
+    "total_rainfall": 706.73,
+    "rainfall_intensity": 0.0024
+  },
+  "water_losses": {
+    "total": 5743.92,
+    "command_area": 751.19,
+    "non_command_area": 4992.73
+  },
+  "administrative_units": {
+    "firkas": {
+      "over_exploited": 23,
+      "semi_critical": 5,
+      "safe": 4,
+      "total": 32
+    },
+    "taluks": {
+      "over_exploited": 5,
+      "semi_critical": 1,
+      "critical": 1,
+      "safe": 1,
+      "total": 8
+    }
+  },
+  "resource_allocation": {
+    "domestic": 2133.21,
+    "industrial": 0.0,
+    "total": 2133.21
+  },
+  "sustainability_metrics": {
+    "extraction_rate": 116.19,
+    "recharge_efficiency": 8244.89,
+    "utilization_rate": 116.19,
+    "safety_margin": -16.19,
+    "water_deficit": 2760.52
+  },
+  "key_findings": [
+    "Area is classified as over-exploited with critical stress level",
+    "Extraction rate of 116.19% significantly exceeds natural recharge",
+    "Water deficit of 2760.52 ha-m indicates severe overuse",
+    "23 firkas and 5 taluks are over-exploited",
+    "Only 4 firkas and 1 taluk remain in safe category",
+    "Total water draft (61029.81) exceeds total recharge (58269.29)",
+    "Agriculture is main consumer with 59379.68 ha-m draft",
+    "Sustainability index of 95.48 indicates urgent intervention needed"
+  ],
+  "recommendations": [
+    "Implement immediate groundwater conservation measures",
+    "Reduce agricultural water extraction",
+    "Promote water-efficient irrigation methods",
+    "Increase artificial recharge structures",
+    "Monitor and regulate new bore wells",
+    "Encourage shift to less water-intensive crops",
+    "Implement rainwater harvesting",
+    "Develop surface water resources",
+    "Establish groundwater monitoring network",
+    "Conduct regular awareness programs"
+  ],
+  "summary": {
+    "overview": "Namakkal district faces severe groundwater stress with over-exploitation in majority of areas.",
+    "main_concerns": [
+      "Total extraction rate of 116.19% indicates unsustainable usage",
+      "Primarily driven by agricultural demands",
+      "23 over-exploited firkas and water deficit of 2760.52 ha-m",
+      "Critical sustainability index of 95.48"
+    ],
+    "urgent_actions": [
+      "Immediate conservation measures required",
+      "Strict monitoring of extraction",
+      "Agricultural water use optimization",
+      "Artificial recharge enhancement"
+    ]
+  },
+  "metadata": {
+    "last_updated": "2025-09-20",
+    "data_source": "Tamil Nadu Water Resources Department",
+    "assessment_period": "2024-2025",
+    "version": "2.0"
+  }
+}

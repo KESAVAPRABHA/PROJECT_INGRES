@@ -229,30 +229,30 @@ class SemanticRouter:
         self.general_chain = general_chain
         self.memory_manager = memory_manager
         self.retrievers = district_retrievers
-        router_llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0, google_api_key=GEMINI_API_KEY)
-        
-        # Updated prompt with 'visualization' category
+        router_llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0, google_api_key=GEMINI_API_KEY)
+                # Updated prompt with 'visualization' category
         routing_prompt = ChatPromptTemplate.from_template(
-            """You are an expert at classifying user questions for a specialized Indian groundwater chatbot.
-            Classify the question into one of three categories: 'visualization', 'groundwater_data', or 'general_knowledge'.
+    """You are an expert at classifying user questions for a specialized Indian groundwater chatbot.
+    Classify the question into one of three categories: 'visualization', 'groundwater_data', or 'general_knowledge'.
 
-            **'visualization' Category:**
-            Choose this if the user is asking to "create a graph", "generate a report", "show a chart", "plot the data", "make a PDF", 
-            "sustainability metrics", "draft composition", or "recharge sources" for a specific location.
-            - Examples: "create a graph for Erode", "generate a pdf report for Namakkal district", "show me sustainability metrics"
+    **'visualization' Category:**
+    Choose this if the user is asking to "create a graph", "generate a report", "show a chart", "plot the data", "make a PDF", 
+    "sustainability metrics", "draft composition", "recharge sources", "compare", or "comparison" for specific locations.
+    - Examples: "create a graph for Erode", "generate a pdf report for Namakkal district", 
+      "show me sustainability metrics", "compare Perundurai and Bhavani", "make a comparison chart"
 
-            **'groundwater_data' Category:**
-            Choose this for specific questions about data, not for creating visuals.
-            - Examples: "What is the groundwater level in Erode?", "summarize the report for Tamil Nadu"
+    **'groundwater_data' Category:**
+    Choose this for specific questions about data, not for creating visuals.
+    - Examples: "What is the groundwater level in Erode?", "summarize the report for Tamil Nadu"
 
-            **'general_knowledge' Category:**
-            Choose this for all other questions.
-            - Examples: "hello", "who are you?", "what is the capital of Japan?"
+    **'general_knowledge' Category:**
+    Choose this for all other questions.
+    - Examples: "hello", "who are you?", "what is the capital of Japan?"
 
-            Return only the single category name.
-            User Question: "{question}"
-            Classification:"""
-        )
+    Return only the single category name.
+    User Question: "{question}"
+    Classification:"""
+)
         self.router_chain = routing_prompt | router_llm
 
     def route(self, user_id, question):
@@ -387,7 +387,44 @@ def generate_extraction_rate_chart(chart_data):
         print(f"Error generating extraction rate chart: {e}")
         traceback.print_exc()
         return None
+def generate_comparison_chart(chart_data, taluk_names, metric="extraction_rate"):
+    """Generates a comparison chart for multiple taluks."""
+    try:
+        # Filter data for the requested taluks
+        filtered_data = []
+        for item in chart_data['extraction_rates']:
+            if any(taluk.lower() in item['location'].lower() for taluk in taluk_names):
+                filtered_data.append(item)
+        
+        if not filtered_data:
+            return None
+            
+        df = pd.DataFrame(filtered_data)
+        df = df.sort_values(by=metric, ascending=False)
+        
+        plt.style.use('seaborn-v0_8-whitegrid')
+        fig, ax = plt.subplots(figsize=(12, 8))
+        
+        bars = ax.bar(df['location'], df[metric], 
+                     color=[item['color'] for item in df.to_dict('records')])
+        ax.set_title(f'Comparison of {metric.replace("_", " ").title()} between {", ".join(taluk_names)}', fontsize=16)
+        ax.set_ylabel(metric.replace("_", " ").title())
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
 
+        img_buffer = BytesIO()
+        plt.savefig(img_buffer, format='png')
+        plt.close(fig)
+        
+        img_buffer.seek(0)
+        image_bytes = img_buffer.getvalue()
+        img_buffer.close()
+        
+        return image_bytes
+    except Exception as e:
+        print(f"Error generating comparison chart: {e}")
+        traceback.print_exc()
+        return None
 def generate_sustainability_chart(chart_data):
     """Generates a bubble chart for sustainability metrics."""
     try:
@@ -616,109 +653,1073 @@ def route(self, user_id, question):
         return {"source_type": "gemini", "result": {"text": "I can answer questions about specific locations. Please be more specific."}}
 
 # Update the handle_visualization_request function
+# def handle_visualization_request(from_number, query):
+#     """Handles requests to generate a graph or PDF report."""
+#     global groundwater_data
+    
+#     query_lower = query.lower()
+    
+#     # First try to use the structured JSON data for visualization
+#     if groundwater_data and 'chart_data' in groundwater_data:
+#         chart_data = groundwater_data['chart_data']
+        
+#         image_bytes = None
+#         caption = "Here is the chart you requested."
+
+#         # Check for district-specific requests in the structured data
+#         district_in_query = next((dist for dist in DISTRICT_JSON_MAP.keys() if dist in query_lower), None)
+        
+#         # Check for specific taluk requests
+#         taluk_in_query = next((taluk for taluk in TALUK_DISTRICT_MAP.keys() if taluk in query_lower), None)
+        
+#         if taluk_in_query:
+#             # Filter data for the specific taluk if requested
+#             if 'extraction_rates' in chart_data:
+#                 taluk_data = [item for item in chart_data['extraction_rates'] 
+#                             if taluk_in_query in item.get('location', '').lower()]
+#                 if taluk_data:
+#                     # Create a temporary chart data structure for just this taluk
+#                     temp_chart_data = {'extraction_rates': taluk_data}
+#                     image_bytes = generate_extraction_rate_chart(temp_chart_data)
+#                     caption = f"This chart shows groundwater extraction rates for {taluk_in_query.title()} taluk."
+#                 else:
+#                     # If no specific taluk data, fall back to the parent district
+#                     parent_district = TALUK_DISTRICT_MAP[taluk_in_query]
+#                     district_data = [item for item in chart_data['extraction_rates'] 
+#                                    if parent_district in item.get('location', '').lower()]
+#                     if district_data:
+#                         temp_chart_data = {'extraction_rates': district_data}
+#                         image_bytes = generate_extraction_rate_chart(temp_chart_data)
+#                         caption = f"This chart shows groundwater extraction rates for {parent_district.title()} district (which includes {taluk_in_query.title()})."
+        
+#         elif district_in_query:
+#             # Filter data for the specific district if requested
+#             if 'extraction_rates' in chart_data:
+#                 district_data = [item for item in chart_data['extraction_rates'] 
+#                                if district_in_query in item.get('location', '').lower()]
+#                 if district_data:
+#                     # Create a temporary chart data structure for just this district
+#                     temp_chart_data = {'extraction_rates': district_data}
+#                     image_bytes = generate_extraction_rate_chart(temp_chart_data)
+#                     caption = f"This chart shows groundwater extraction rates for {district_in_query.title()} district."
+        
+#         # General visualization requests
+#         elif "extraction rate" in query_lower or "extraction" in query_lower:
+#             image_bytes = generate_extraction_rate_chart(chart_data)
+#             caption = "This chart shows groundwater extraction rates across all locations."
+#         elif "sustainability" in query_lower:
+#             image_bytes = generate_sustainability_chart(chart_data)
+#             caption = "Sustainability metrics across locations."
+        
+#         if image_bytes:
+#             send_whatsapp_media(from_number, image_bytes, "chart.png", caption, "image/png")
+#             return
+#         else:
+#             # If no visualization was generated, provide information about the location
+#             location_to_query = taluk_in_query or district_in_query
+#             if location_to_query:
+#                 send_whatsapp_message(from_number, f"Looking up information about {location_to_query.title()}...")
+#                 router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
+                
+#                 if router_output["source_type"] == "rag":
+#                     answer = router_output["result"].get('answer', 'No specific data found.')
+#                     send_whatsapp_message(from_number, f"Here's what I found about {location_to_query.title()}:\n\n{answer}")
+#                 else:
+#                     send_whatsapp_message(from_number, f"I don't have specific visualization data for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+#                 return
+    
+#     # Fall back to RAG-based information if structured data not available
+#     try:
+#         # Check for both taluks and districts
+#         taluk_in_query = next((taluk for taluk in TALUK_DISTRICT_MAP.keys() if taluk in query_lower), None)
+#         district_in_query = next((dist for dist in DISTRICT_JSON_MAP.keys() if dist in query_lower), None)
+        
+#         location_to_query = taluk_in_query or district_in_query
+        
+#         if not location_to_query:
+#             send_whatsapp_message(from_number, "Please specify a location (e.g., 'create a graph for Erode' or 'show data for Bhavani') to generate a visual.")
+#             return
+            
+#         # Use the RAG system to provide information about this location
+#         send_whatsapp_message(from_number, f"Looking up groundwater data for {location_to_query.title()}...")
+        
+#         router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
+        
+#         if router_output["source_type"] == "rag":
+#             answer = router_output["result"].get('answer', 'No specific data found.')
+#             source_info = f"\n\n*Source:* {router_output['result'].get('source_name', 'Local Documents')}"
+#             send_whatsapp_message(from_number, f"Here's what I found about {location_to_query.title()}:\n\n{answer}{source_info}")
+#         else:
+#             send_whatsapp_message(from_number, f"I don't have specific visualization data for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+
+#     except Exception as e:
+#         print(f"Error during visualization request: {e}")
+#         traceback.print_exc()
+#         send_whatsapp_message(from_number, "I couldn't create a visualization, but I can answer questions about groundwater data. Try asking me something specific.")
+
+
+# def handle_visualization_request(from_number, query):
+#     """Handles requests to generate a graph or PDF report."""
+#     global groundwater_data
+    
+#     query_lower = query.lower()
+    
+#     # First try to use the structured JSON data for visualization
+#     if groundwater_data and 'chart_data' in groundwater_data:
+#         chart_data = groundwater_data['chart_data']
+        
+#         image_bytes = None
+#         caption = "Here is the chart you requested."
+
+#         # Check for comparison requests (multiple taluks)
+#         taluk_names = []
+#         for taluk in TALUK_DISTRICT_MAP.keys():
+#             if taluk in query_lower:
+#                 taluk_names.append(taluk)
+        
+#         # If we found multiple taluks, generate a comparison chart
+#         if len(taluk_names) >= 2:
+#             image_bytes = generate_comparison_chart(chart_data, taluk_names)
+#             caption = f"Comparison of groundwater extraction rates between {', '.join([t.title() for t in taluk_names])}"
+        
+#         # Check for district-specific requests in the structured data
+#         district_in_query = next((dist for dist in DISTRICT_JSON_MAP.keys() if dist in query_lower), None)
+        
+#         # Check for specific taluk requests (single taluk)
+#         taluk_in_query = next((taluk for taluk in TALUK_DISTRICT_MAP.keys() if taluk in query_lower), None)
+        
+#         if taluk_in_query and not image_bytes:  # Only if we haven't already generated a comparison
+#             # Filter data for the specific taluk if requested
+#             if 'extraction_rates' in chart_data:
+#                 taluk_data = [item for item in chart_data['extraction_rates'] 
+#                             if taluk_in_query in item.get('location', '').lower()]
+#                 if taluk_data:
+#                     # Create a temporary chart data structure for just this taluk
+#                     temp_chart_data = {'extraction_rates': taluk_data}
+#                     image_bytes = generate_extraction_rate_chart(temp_chart_data)
+#                     caption = f"This chart shows groundwater extraction rates for {taluk_in_query.title()} taluk."
+#                 else:
+#                     # If no specific taluk data, fall back to the parent district
+#                     parent_district = TALUK_DISTRICT_MAP[taluk_in_query]
+#                     district_data = [item for item in chart_data['extraction_rates'] 
+#                                    if parent_district in item.get('location', '').lower()]
+#                     if district_data:
+#                         temp_chart_data = {'extraction_rates': district_data}
+#                         image_bytes = generate_extraction_rate_chart(temp_chart_data)
+#                         caption = f"This chart shows groundwater extraction rates for {parent_district.title()} district (which includes {taluk_in_query.title()})."
+        
+#         elif district_in_query and not image_bytes:  # Only if we haven't already generated a comparison
+#             # Filter data for the specific district if requested
+#             if 'extraction_rates' in chart_data:
+#                 district_data = [item for item in chart_data['extraction_rates'] 
+#                                if district_in_query in item.get('location', '').lower()]
+#                 if district_data:
+#                     # Create a temporary chart data structure for just this district
+#                     temp_chart_data = {'extraction_rates': district_data}
+#                     image_bytes = generate_extraction_rate_chart(temp_chart_data)
+#                     caption = f"This chart shows groundwater extraction rates for {district_in_query.title()} district."
+        
+#         # General visualization requests
+#         elif ("extraction rate" in query_lower or "extraction" in query_lower) and not image_bytes:
+#             image_bytes = generate_extraction_rate_chart(chart_data)
+#             caption = "This chart shows groundwater extraction rates across all locations."
+#         elif "sustainability" in query_lower and not image_bytes:
+#             image_bytes = generate_sustainability_chart(chart_data)
+#             caption = "Sustainability metrics across locations."
+        
+#         if image_bytes:
+#             send_whatsapp_media(from_number, image_bytes, "chart.png", caption, "image/png")
+#             return
+#         else:
+#             # If no visualization was generated, provide information about the location
+#             location_to_query = taluk_in_query or district_in_query
+#             if location_to_query:
+#                 send_whatsapp_message(from_number, f"Looking up information about {location_to_query.title()}...")
+#                 router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
+                
+#                 if router_output["source_type"] == "rag":
+#                     answer = router_output["result"].get('answer', 'No specific data found.')
+#                     send_whatsapp_message(from_number, f"Here's what I found about {location_to_query.title()}:\n\n{answer}")
+#                 else:
+#                     send_whatsapp_message(from_number, f"I don't have specific visualization data for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+#                 return
+    
+#     # Fall back to RAG-based information if structured data not available
+#     try:
+#         # Check for both taluks and districts
+#         taluk_names = []
+#         for taluk in TALUK_DISTRICT_MAP.keys():
+#             if taluk in query_lower:
+#                 taluk_names.append(taluk)
+        
+#         district_in_query = next((dist for dist in DISTRICT_JSON_MAP.keys() if dist in query_lower), None)
+        
+#         location_to_query = taluk_names[0] if taluk_names else district_in_query
+        
+#         if not location_to_query:
+#             send_whatsapp_message(from_number, "Please specify a location (e.g., 'create a graph for Erode' or 'show data for Bhavani and Perundurai') to generate a visual.")
+#             return
+            
+#         # Use the RAG system to provide information about this location
+#         if len(taluk_names) >= 2:
+#             # For multiple taluks, provide information about each
+#             for taluk in taluk_names:
+#                 send_whatsapp_message(from_number, f"Looking up groundwater data for {taluk.title()}...")
+#                 router_output = hydra_router.route(from_number, f"What is the groundwater data for {taluk}?")
+                
+#                 if router_output["source_type"] == "rag":
+#                     answer = router_output["result"].get('answer', 'No specific data found.')
+#                     source_info = f"\n\n*Source:* {router_output['result'].get('source_name', 'Local Documents')}"
+#                     send_whatsapp_message(from_number, f"Here's what I found about {taluk.title()}:\n\n{answer}{source_info}")
+#                 else:
+#                     send_whatsapp_message(from_number, f"I don't have specific visualization data for {taluk.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+#         else:
+#             # For single location
+#             send_whatsapp_message(from_number, f"Looking up groundwater data for {location_to_query.title()}...")
+#             router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
+            
+#             if router_output["source_type"] == "rag":
+#                 answer = router_output["result"].get('answer', 'No specific data found.')
+#                 source_info = f"\n\n*Source:* {router_output['result'].get('source_name', 'Local Documents')}"
+#                 send_whatsapp_message(from_number, f"Here's what I found about {location_to_query.title()}:\n\n{answer}{source_info}")
+#             else:
+#                 send_whatsapp_message(from_number, f"I don't have specific visualization data for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+
+#     except Exception as e:
+#         print(f"Error during visualization request: {e}")
+# def handle_visualization_request(from_number, query):
+#     """Handles requests to generate comprehensive analysis charts for single locations."""
+#     global groundwater_data
+    
+#     query_lower = query.lower()
+    
+#     # First try to use the structured JSON data for visualization
+#     if groundwater_data and 'flattened_data' in groundwater_data:
+        
+#         image_bytes = None
+#         caption = "Here is the analysis you requested."
+
+#         # Find the requested location (taluk or district)
+#         location_found = None
+        
+#         # Check for specific taluk requests first
+#         for taluk in TALUK_DISTRICT_MAP.keys():
+#             if taluk in query_lower:
+#                 location_found = taluk
+#                 break
+        
+#         # If no taluk found, check for district requests
+#         if not location_found:
+#             for district in DISTRICT_JSON_MAP.keys():
+#                 if district in query_lower:
+#                     location_found = district
+#                     break
+        
+#         if location_found:
+#             # Determine which type of analysis to generate
+#             if any(keyword in query_lower for keyword in ['comprehensive', 'detailed', 'full', 'complete']):
+#                 # Generate comprehensive 6-panel analysis
+#                 image_bytes = generate_single_location_analysis_chart(groundwater_data, location_found)
+#                 caption = f"Comprehensive groundwater analysis for {location_found.title()} showing all key metrics including extraction status, water balance, draft composition, sustainability metrics, firka distribution, and recharge vs draft comparison."
+            
+#             elif any(keyword in query_lower for keyword in ['key', 'important', 'critical', 'main', 'summary']):
+#                 # Generate focused 5-metric summary
+#                 image_bytes = generate_key_metrics_summary_chart(groundwater_data, location_found)
+#                 caption = f"Key groundwater metrics for {location_found.title()} showing the 5 most important indicators: extraction rate, safety margin, sustainability index, net balance, and firka risk score."
+            
+#             else:
+#                 # Default to key metrics for single location requests
+#                 image_bytes = generate_key_metrics_summary_chart(groundwater_data, location_found)
+#                 caption = f"Key groundwater metrics analysis for {location_found.title()} showing the 5 most critical indicators for water management decision-making."
+        
+#         # If specific location visualization was generated, send it
+#         if image_bytes:
+#             send_whatsapp_media(from_number, image_bytes, "groundwater_analysis.png", caption, "image/png")
+            
+#             # Send additional textual summary
+#             send_location_analysis_summary(from_number, groundwater_data, location_found)
+#             return
+        
+#         # Fallback to original chart_data if available
+#         elif 'chart_data' in groundwater_data:
+#             chart_data = groundwater_data['chart_data']
+            
+#             # General visualization requests using existing functions
+#             if ("extraction rate" in query_lower or "extraction" in query_lower):
+#                 image_bytes = generate_extraction_rate_chart(chart_data)
+#                 caption = "Groundwater extraction rates across all locations."
+#             elif "sustainability" in query_lower:
+#                 image_bytes = generate_sustainability_chart(chart_data)
+#                 caption = "Sustainability metrics across all locations."
+            
+#             if image_bytes:
+#                 send_whatsapp_media(from_number, image_bytes, "chart.png", caption, "image/png")
+#                 return
+    
+#     # Fall back to RAG-based information if no structured data or visualization generated
+#     try:
+#         # Check for location in query
+#         location_to_query = None
+#         for taluk in TALUK_DISTRICT_MAP.keys():
+#             if taluk in query_lower:
+#                 location_to_query = taluk
+#                 break
+        
+#         if not location_to_query:
+#             for district in DISTRICT_JSON_MAP.keys():
+#                 if district in query_lower:
+#                     location_to_query = district
+#                     break
+        
+#         if location_to_query:
+#             # Use RAG system to provide information about this location
+#             send_whatsapp_message(from_number, f"Looking up groundwater data for {location_to_query.title()}...")
+#             router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
+            
+#             if router_output["source_type"] == "rag":
+#                 answer = router_output["result"].get('answer', 'No specific data found.')
+#                 source_info = f"\n\n*Source:* {router_output['result'].get('source_name', 'Local Documents')}"
+#                 send_whatsapp_message(from_number, f"Here's what I found about {location_to_query.title()}:\n\n{answer}{source_info}")
+#             else:
+#                 send_whatsapp_message(from_number, f"I don't have specific visualization data for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+#         else:
+#             send_whatsapp_message(from_number, "Please specify a location (e.g., 'show analysis for Erode', 'key metrics for Bhavani', or 'comprehensive report for Perundurai') to generate a detailed analysis.")
+
+#     except Exception as e:
+#         print(f"Error during visualization request: {e}")
+#         traceback.print_exc()
+#         send_whatsapp_message(from_number, "I couldn't create a visualization, but I can answer questions about groundwater data. Try asking me something specific.")
+
+
+# def send_location_analysis_summary(from_number, groundwater_data, location_name):
+#     """Sends a textual summary of the key findings for a location."""
+#     try:
+#         flattened_data = groundwater_data.get('flattened_data', [])
+        
+#         location_data = None
+#         for item in flattened_data:
+#             if location_name.lower() in item['location'].lower():
+#                 location_data = item
+#                 break
+        
+#         if not location_data:
+#             return
+        
+#         summary = f"📊 **Analysis Summary: {location_data['location'].title()}**\n\n"
+        
+#         # Overall Status
+#         status_emoji = {
+#             'safe': '✅',
+#             'semi_critical': '⚠️', 
+#             'critical': '🔶',
+#             'over_exploited': '🚨'
+#         }
+        
+#         emoji = status_emoji.get(location_data['overall_status'], '📍')
+#         summary += f"{emoji} **Overall Status:** {location_data['overall_status'].replace('_', ' ').title()}\n\n"
+        
+#         # Key Metrics
+#         summary += f"🔹 **Key Metrics:**\n"
+#         summary += f"   • Extraction Rate: {location_data['extraction_rate_total']:.1f}%\n"
+#         summary += f"   • Safety Margin: {location_data['safety_margin']:.1f}%\n"
+#         summary += f"   • Sustainability Index: {location_data['sustainability_index']:.1f}\n"
+#         summary += f"   • Net Water Balance: {location_data['net_balance']:,.0f} ha-m\n\n"
+        
+#         # Risk Assessment
+#         total_firkas = (location_data['over_exploited_firkas'] + 
+#                        location_data['semi_critical_firkas'] + 
+#                        location_data['safe_firkas'])
+        
+#         summary += f"🔹 **Risk Assessment:**\n"
+#         summary += f"   • Total Firkas: {total_firkas}\n"
+#         summary += f"   • Over-exploited: {location_data['over_exploited_firkas']}\n"
+#         summary += f"   • Semi-critical: {location_data['semi_critical_firkas']}\n"
+#         summary += f"   • Safe: {location_data['safe_firkas']}\n\n"
+        
+#         # Recommendations
+#         summary += f"💡 **Key Insights:**\n"
+        
+#         if location_data['extraction_rate_total'] > 100:
+#             summary += f"   • ⚠️ High extraction rate requires immediate intervention\n"
+#         elif location_data['extraction_rate_total'] > 90:
+#             summary += f"   • ⚠️ Approaching critical extraction levels\n"
+#         else:
+#             summary += f"   • ✅ Extraction rate within manageable limits\n"
+        
+#         if location_data['net_balance'] < 0:
+#             summary += f"   • 🚨 Water deficit of {abs(location_data['net_balance']):,.0f} ha-m\n"
+#         else:
+#             summary += f"   • ✅ Water surplus of {location_data['net_balance']:,.0f} ha-m\n"
+        
+#         if location_data['over_exploited_firkas'] > 0:
+#             summary += f"   • 🔴 {location_data['over_exploited_firkas']} firka(s) need urgent attention\n"
+        
+#         send_whatsapp_message(from_number, summary)
+        
+#     except Exception as e:
+#         print(f"Error sending location analysis summary: {e}")
+#         traceback.print_exc()
+#         send_whatsapp_message(from_number, "I couldn't create a visualization, but I can answer questions about groundwater data. Try asking me something specific.")
+
 def handle_visualization_request(from_number, query):
     """Handles requests to generate a graph or PDF report."""
     global groundwater_data
     
     query_lower = query.lower()
     
-    # First try to use the structured JSON data for visualization
-    if groundwater_data and 'chart_data' in groundwater_data:
-        chart_data = groundwater_data['chart_data']
+    # Check for PDF report requests first
+    if any(keyword in query_lower for keyword in ['pdf', 'report', 'generate report', 'download']):
+        # Find the requested location
+        location_found = None
         
-        image_bytes = None
-        caption = "Here is the chart you requested."
-
-        # Check for district-specific requests in the structured data
-        district_in_query = next((dist for dist in DISTRICT_JSON_MAP.keys() if dist in query_lower), None)
+        # Check for specific taluk requests first
+        for taluk in TALUK_DISTRICT_MAP.keys():
+            if taluk in query_lower:
+                location_found = taluk
+                break
         
-        # Check for specific taluk requests
-        taluk_in_query = next((taluk for taluk in TALUK_DISTRICT_MAP.keys() if taluk in query_lower), None)
+        # If no taluk found, check for district requests
+        if not location_found:
+            for district in DISTRICT_JSON_MAP.keys():
+                if district in query_lower:
+                    location_found = district
+                    break
         
-        if taluk_in_query:
-            # Filter data for the specific taluk if requested
-            if 'extraction_rates' in chart_data:
-                taluk_data = [item for item in chart_data['extraction_rates'] 
-                            if taluk_in_query in item.get('location', '').lower()]
-                if taluk_data:
-                    # Create a temporary chart data structure for just this taluk
-                    temp_chart_data = {'extraction_rates': taluk_data}
-                    image_bytes = generate_extraction_rate_chart(temp_chart_data)
-                    caption = f"This chart shows groundwater extraction rates for {taluk_in_query.title()} taluk."
-                else:
-                    # If no specific taluk data, fall back to the parent district
-                    parent_district = TALUK_DISTRICT_MAP[taluk_in_query]
-                    district_data = [item for item in chart_data['extraction_rates'] 
-                                   if parent_district in item.get('location', '').lower()]
-                    if district_data:
-                        temp_chart_data = {'extraction_rates': district_data}
-                        image_bytes = generate_extraction_rate_chart(temp_chart_data)
-                        caption = f"This chart shows groundwater extraction rates for {parent_district.title()} district (which includes {taluk_in_query.title()})."
-        
-        elif district_in_query:
-            # Filter data for the specific district if requested
-            if 'extraction_rates' in chart_data:
-                district_data = [item for item in chart_data['extraction_rates'] 
-                               if district_in_query in item.get('location', '').lower()]
-                if district_data:
-                    # Create a temporary chart data structure for just this district
-                    temp_chart_data = {'extraction_rates': district_data}
-                    image_bytes = generate_extraction_rate_chart(temp_chart_data)
-                    caption = f"This chart shows groundwater extraction rates for {district_in_query.title()} district."
-        
-        # General visualization requests
-        elif "extraction rate" in query_lower or "extraction" in query_lower:
-            image_bytes = generate_extraction_rate_chart(chart_data)
-            caption = "This chart shows groundwater extraction rates across all locations."
-        elif "sustainability" in query_lower:
-            image_bytes = generate_sustainability_chart(chart_data)
-            caption = "Sustainability metrics across locations."
-        
-        if image_bytes:
-            send_whatsapp_media(from_number, image_bytes, "chart.png", caption, "image/png")
-            return
-        else:
-            # If no visualization was generated, provide information about the location
-            location_to_query = taluk_in_query or district_in_query
-            if location_to_query:
-                send_whatsapp_message(from_number, f"Looking up information about {location_to_query.title()}...")
-                router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
+        if location_found:
+            send_whatsapp_message(from_number, f"📋 Generating comprehensive PDF report for {location_found.title()}...")
+            
+            # Generate PDF report
+            pdf_bytes = generate_taluk_pdf_report(groundwater_data, location_found)
+            
+            if pdf_bytes:
+                filename = f"Groundwater_Report_{location_found.title()}.pdf"
+                caption = f"📊 Comprehensive Groundwater Report for {location_found.title()}\n\nThis report contains detailed analysis, key metrics, and recommendations for water management."
                 
-                if router_output["source_type"] == "rag":
-                    answer = router_output["result"].get('answer', 'No specific data found.')
-                    send_whatsapp_message(from_number, f"Here's what I found about {location_to_query.title()}:\n\n{answer}")
-                else:
-                    send_whatsapp_message(from_number, f"I don't have specific visualization data for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+                send_whatsapp_media(from_number, pdf_bytes, filename, caption, "application/pdf")
+                return
+            else:
+                send_whatsapp_message(from_number, f"Sorry, I couldn't generate a PDF report for {location_found.title()}. The data might not be available.")
                 return
     
-    # Fall back to RAG-based information if structured data not available
-    try:
-        # Check for both taluks and districts
-        taluk_in_query = next((taluk for taluk in TALUK_DISTRICT_MAP.keys() if taluk in query_lower), None)
-        district_in_query = next((dist for dist in DISTRICT_JSON_MAP.keys() if dist in query_lower), None)
+    # Rest of the existing visualization handling code remains the same...
+    # [Keep all the existing chart generation code here]
+    
+    # First try to use the structured JSON data for visualization
+    if groundwater_data and 'flattened_data' in groundwater_data:
         
-        location_to_query = taluk_in_query or district_in_query
+        image_bytes = None
+        caption = "Here is your water analysis report."
+        chart_type = 'key_metrics'  # default
+
+        # Find the requested location (taluk or district)
+        location_found = None
+        
+        # Check for specific taluk requests first
+        for taluk in TALUK_DISTRICT_MAP.keys():
+            if taluk in query_lower:
+                location_found = taluk
+                break
+        
+        # If no taluk found, check for district requests
+        if not location_found:
+            for district in DISTRICT_JSON_MAP.keys():
+                if district in query_lower:
+                    location_found = district
+                    break
+        
+        if location_found:
+            # Determine which type of analysis to generate
+            if any(keyword in query_lower for keyword in ['comprehensive', 'detailed', 'full', 'complete']):
+                # Generate comprehensive 6-panel analysis
+                image_bytes = generate_single_location_analysis_chart(groundwater_data, location_found)
+                caption = f"Complete water analysis for {location_found.title()}. This shows 6 different aspects of your area's water situation."
+                chart_type = 'comprehensive'
+            
+            elif any(keyword in query_lower for keyword in ['key', 'important', 'critical', 'main', 'summary']):
+                # Generate focused 5-metric summary
+                image_bytes = generate_key_metrics_summary_chart(groundwater_data, location_found)
+                caption = f"Key water facts for {location_found.title()}. These are the 5 most important things to know about water in your area."
+                chart_type = 'key_metrics'
+            
+            else:
+                # Default to key metrics for single location requests
+                image_bytes = generate_key_metrics_summary_chart(groundwater_data, location_found)
+                caption = f"Water situation summary for {location_found.title()}. This shows the most important water facts for your area."
+                chart_type = 'key_metrics'
+        
+        # If specific location visualization was generated, send it
+        if image_bytes:
+            send_whatsapp_media(from_number, image_bytes, "water_report.png", caption, "image/png")
+            
+            # Send simple chart explanation
+            send_simple_chart_explanation(from_number, location_found, chart_type)
+            
+            # Send simple textual summary
+            send_location_analysis_summary(from_number, groundwater_data, location_found)
+            return
+        
+        # Fallback to original chart_data if available
+        elif 'chart_data' in groundwater_data:
+            chart_data = groundwater_data['chart_data']
+            
+            # General visualization requests using existing functions
+            if ("extraction rate" in query_lower or "extraction" in query_lower):
+                image_bytes = generate_extraction_rate_chart(chart_data)
+                caption = "Water usage levels across different areas. Higher bars mean more water is being used."
+            elif "sustainability" in query_lower:
+                image_bytes = generate_sustainability_chart(chart_data)
+                caption = "Long-term water health across different areas. This shows which areas can maintain their water supply."
+            
+            if image_bytes:
+                send_whatsapp_media(from_number, image_bytes, "water_chart.png", caption, "image/png")
+                send_whatsapp_message(from_number, "This chart shows water information across multiple areas. Each point or bar represents a different location.")
+                return
+    
+    # Fall back to RAG-based information if no structured data or visualization generated
+    try:
+        # Check for location in query
+        location_to_query = None
+        for taluk in TALUK_DISTRICT_MAP.keys():
+            if taluk in query_lower:
+                location_to_query = taluk
+                break
         
         if not location_to_query:
-            send_whatsapp_message(from_number, "Please specify a location (e.g., 'create a graph for Erode' or 'show data for Bhavani') to generate a visual.")
-            return
+            for district in DISTRICT_JSON_MAP.keys():
+                if district in query_lower:
+                    location_to_query = district
+                    break
+        
+        if location_to_query:
+            # Use RAG system to provide information about this location
+            send_whatsapp_message(from_number, f"Looking up water information for {location_to_query.title()}...")
+            router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
             
-        # Use the RAG system to provide information about this location
-        send_whatsapp_message(from_number, f"Looking up groundwater data for {location_to_query.title()}...")
-        
-        router_output = hydra_router.route(from_number, f"What is the groundwater data for {location_to_query}?")
-        
-        if router_output["source_type"] == "rag":
-            answer = router_output["result"].get('answer', 'No specific data found.')
-            source_info = f"\n\n*Source:* {router_output['result'].get('source_name', 'Local Documents')}"
-            send_whatsapp_message(from_number, f"Here's what I found about {location_to_query.title()}:\n\n{answer}{source_info}")
+            if router_output["source_type"] == "rag":
+                answer = router_output["result"].get('answer', 'No specific data found.')
+                source_info = f"\n\n*Source:* {router_output['result'].get('source_name', 'Local Documents')}"
+                send_whatsapp_message(from_number, f"Here's what I found about water in {location_to_query.title()}:\n\n{answer}{source_info}")
+            else:
+                send_whatsapp_message(from_number, f"I don't have specific water charts for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
         else:
-            send_whatsapp_message(from_number, f"I don't have specific visualization data for {location_to_query.title()}, but here's what I know:\n\n{router_output['result']['text']}")
+            send_whatsapp_message(from_number, "Please tell me which area you want to know about. For example: 'show water report for Erode' or 'generate PDF report for Bhavani'")
 
     except Exception as e:
         print(f"Error during visualization request: {e}")
         traceback.print_exc()
-        send_whatsapp_message(from_number, "I couldn't create a visualization, but I can answer questions about groundwater data. Try asking me something specific.")
+        send_whatsapp_message(from_number, "I'm having trouble creating your water report right now. You can still ask me questions about water in your area and I'll try to help.")
+
+def send_location_analysis_summary(from_number, groundwater_data, location_name):
+    """Sends a simple, user-friendly summary that anyone can understand."""
+    try:
+        flattened_data = groundwater_data.get('flattened_data', [])
+        
+        location_data = None
+        for item in flattened_data:
+            if location_name.lower() in item['location'].lower():
+                location_data = item
+                break
+        
+        if not location_data:
+            return
+        
+        # Create simple, easy-to-understand summary
+        summary = f"💧 *Water Report: {location_data['location'].title()}*\n\n"
+        
+        # Overall Status in simple terms
+        status_messages = {
+            'safe': '✅ *Water Situation:* Good - No major concerns',
+            'semi_critical': '⚠️ *Water Situation:* Watch carefully - Some problems starting',
+            'critical': '🔶 *Water Situation:* Serious concerns - Action needed soon',
+            'over_exploited': '🚨 *Water Situation:* Very serious - Urgent action required'
+        }
+        
+        summary += status_messages.get(location_data['overall_status'], '📍 *Water Situation:* Under review') + '\n\n'
+        
+        # Explain what's happening in simple terms
+        extraction_rate = location_data['extraction_rate_total']
+        
+        summary += "*What's happening with water:*\n"
+        
+        # Water usage explanation
+        if extraction_rate > 100:
+            summary += f"• We're using {extraction_rate:.0f}% of available water (using too much!)\n"
+            summary += "• This means we're taking out more water than nature puts back in\n"
+        elif extraction_rate > 90:
+            summary += f"• We're using {extraction_rate:.0f}% of available water (almost too much)\n"
+            summary += "• We need to be very careful about water use\n"
+        elif extraction_rate > 70:
+            summary += f"• We're using {extraction_rate:.0f}% of available water (need to watch)\n"
+            summary += "• Water use is getting high but still manageable\n"
+        else:
+            summary += f"• We're using {extraction_rate:.0f}% of available water (good level)\n"
+            summary += "• Water use is at a safe level\n"
+        
+        summary += "\n"
+        
+        # Water balance in simple terms
+        net_balance = location_data['net_balance']
+        if net_balance > 0:
+            summary += f"• We have extra water: {net_balance:,.0f} units more than we use\n"
+        else:
+            summary += f"• We have a water shortage: {abs(net_balance):,.0f} units less than we need\n"
+        
+        summary += "\n"
+        
+        # Area problems in simple terms
+        total_areas = (location_data['over_exploited_firkas'] + 
+                      location_data['semi_critical_firkas'] + 
+                      location_data['safe_firkas'])
+        
+        problem_areas = location_data['over_exploited_firkas']
+        warning_areas = location_data['semi_critical_firkas']
+        safe_areas = location_data['safe_firkas']
+        
+        summary += f"*Areas in {location_data['location'].title()}:*\n"
+        summary += f"• Total areas checked: {total_areas}\n"
+        
+        if problem_areas > 0:
+            summary += f"• Areas with serious water problems: {problem_areas}\n"
+        if warning_areas > 0:
+            summary += f"• Areas that need watching: {warning_areas}\n"
+        if safe_areas > 0:
+            summary += f"• Areas with good water situation: {safe_areas}\n"
+        
+        summary += "\n"
+        
+        # Simple recommendations
+        summary += "*What this means for you:*\n"
+        
+        if extraction_rate > 100:
+            summary += "• Water situation is very serious - save water wherever possible\n"
+            summary += "• Contact local authorities about water conservation\n"
+        elif extraction_rate > 90:
+            summary += "• Start saving water now to prevent bigger problems\n"
+            summary += "• Avoid wasting water in daily activities\n"
+        elif extraction_rate > 70:
+            summary += "• Be mindful of water use - don't waste it\n"
+            summary += "• Consider water-saving methods\n"
+        else:
+            summary += "• Water situation is currently good\n"
+            summary += "• Continue using water responsibly\n"
+        
+        if problem_areas > 0:
+            summary += f"• {problem_areas} area(s) need immediate attention from authorities\n"
+        
+        # Water usage breakdown in simple terms
+        total_usage = location_data['total_draft']
+        farm_usage = (location_data['agriculture_draft'] / total_usage) * 100
+        home_usage = (location_data['domestic_draft'] / total_usage) * 100
+        industry_usage = (location_data['industry_draft'] / total_usage) * 100
+        
+        summary += f"\n*Where water is being used:*\n"
+        summary += f"• Farming: {farm_usage:.0f}%\n"
+        summary += f"• Homes & drinking: {home_usage:.0f}%\n"
+        summary += f"• Industries: {industry_usage:.0f}%\n"
+        
+        send_whatsapp_message(from_number, summary)
+        
+    except Exception as e:
+        print(f"Error sending simple location summary: {e}")
+        import traceback
+        traceback.print_exc()
+
+def get_simple_status_message(overall_status, extraction_rate):
+    """Returns a simple explanation of the water situation."""
+    if overall_status == 'safe':
+        return "Water situation is good. Keep using water wisely."
+    elif overall_status == 'semi_critical':
+        return "Water levels are getting concerning. Time to start saving water."
+    elif overall_status == 'critical':
+        return "Water situation is serious. Save water and avoid waste."
+    elif overall_status == 'over_exploited':
+        return "Water crisis situation. Every drop counts - save water immediately."
+    else:
+        return "Water situation is being monitored."
+
+def send_simple_chart_explanation(from_number, location_name, chart_type):
+    """Sends a simple explanation of what the chart shows."""
+    explanations = {
+        'comprehensive': f"""
+🔍 *Understanding Your Water Chart for {location_name.title()}*
+
+Your chart shows 6 important things about water in your area:
+
+1️⃣ *Circle Chart (top left):* Shows how much water we're using
+   • Green = Good, Yellow = Careful, Red = Problem
+
+2️⃣ *Bar Chart (top middle):* Compares water coming in vs going out
+   • Blue = Water available, Red = Water used
+
+3️⃣ *Pie Chart (top right):* Shows who uses the most water
+   • Purple = Farms, Blue = Homes, Orange = Factories
+
+4️⃣ *Side Bars (bottom left):* Different measurements of water health
+   • Longer bars = Better situation
+
+5️⃣ *Stacked Bar (bottom middle):* Problem areas in your region
+   • Red = Serious problems, Yellow = Watch carefully, Green = All good
+
+6️⃣ *Comparison Bars (bottom right):* Water coming in vs going out
+   • Green = Water from rain/rivers, Red = Water we use
+        """,
+        
+        'key_metrics': f"""
+📊 *Understanding Your Water Summary for {location_name.title()}*
+
+Your chart shows the 5 most important water facts:
+
+🔹 *How much water we use* - Lower is better
+🔹 *Safety cushion* - Higher is better (how much extra water we have)
+🔹 *Long-term health* - Higher numbers mean water will last longer
+🔹 *Water balance* - Positive numbers are good (extra water)
+🔹 *Problem areas score* - Lower is better (fewer problem areas)
+
+*Colors mean:*
+• Green bars = Good situation
+• Yellow bars = Be careful
+• Orange bars = Getting serious
+• Red bars = Need urgent action
+        """
+    }
+    
+    explanation = explanations.get(chart_type, "This chart shows important water information for your area.")
+    send_whatsapp_message(from_number, explanation)
+
+def generate_single_location_analysis_chart(groundwater_data, location_name):
+    """
+    Generates a comprehensive multi-feature analysis chart for a single location
+    showing the 5 most important groundwater metrics for users.
+    """
+    try:
+        flattened_data = groundwater_data.get('flattened_data', [])
+        
+        # Find data for the requested location
+        location_data = None
+        for item in flattened_data:
+            if location_name.lower() in item['location'].lower():
+                location_data = item
+                break
+        
+        if not location_data:
+            print(f"No data found for location: {location_name}")
+            return None
+        
+        # Create a 2x3 subplot layout for comprehensive analysis
+        fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(18, 12))
+        
+        location_title = location_data['location'].title()
+        
+        # 1. Extraction Rate Status (Gauge Chart)
+        extraction_rate = location_data['extraction_rate_total']
+        
+        # Create a gauge-like visualization for extraction rate
+        colors = ['#28a745', '#ffc107', '#fd7e14', '#dc3545']  # green, yellow, orange, red
+        ranges = [70, 90, 100, 200]  # safe, semi-critical, critical, over-exploited
+        
+        if extraction_rate <= 70:
+            color = colors[0]
+            status = "Safe"
+        elif extraction_rate <= 90:
+            color = colors[1]
+            status = "Semi-Critical"
+        elif extraction_rate <= 100:
+            color = colors[2]
+            status = "Critical"
+        else:
+            color = colors[3]
+            status = "Over-Exploited"
+        
+        # Gauge visualization
+        wedges = [70, 20, 10, 100]  # proportional segments
+        wedge_colors = colors
+        ax1.pie(wedges, colors=wedge_colors, startangle=180, counterclock=False)
+        ax1.add_patch(plt.Circle((0, 0), 0.5, color='white'))
+        ax1.text(0, 0, f'{extraction_rate:.1f}%\n{status}', ha='center', va='center', fontsize=12, fontweight='bold')
+        ax1.set_title('Extraction Rate Status', fontweight='bold')
+        
+        # 2. Water Balance (Bar Chart)
+        water_metrics = ['Total\nAvailability', 'Total\nDraft', 'Net\nBalance']
+        water_values = [location_data['total_availability'], 
+                       location_data['total_draft'], 
+                       location_data['net_balance']]
+        
+        colors_water = ['#3498db', '#e74c3c', '#2ecc71' if location_data['net_balance'] > 0 else '#e74c3c']
+        bars = ax2.bar(water_metrics, water_values, color=colors_water)
+        ax2.set_title('Water Balance (ha-m)', fontweight='bold')
+        ax2.set_ylabel('Volume (ha-m)')
+        
+        # Add value labels on bars
+        for bar, value in zip(bars, water_values):
+            height = bar.get_height()
+            ax2.text(bar.get_x() + bar.get_width()/2., height + (max(water_values) * 0.01),
+                    f'{value:,.0f}', ha='center', va='bottom', fontsize=9)
+        
+        # 3. Draft Composition (Pie Chart)
+        draft_categories = ['Agriculture', 'Domestic', 'Industry']
+        draft_values = [location_data['agriculture_draft'], 
+                       location_data['domestic_draft'], 
+                       location_data['industry_draft']]
+        draft_colors = ['#8e44ad', '#3498db', '#f39c12']
+        
+        ax3.pie(draft_values, labels=draft_categories, autopct='%1.1f%%', 
+                colors=draft_colors, startangle=90)
+        ax3.set_title('Water Draft Composition', fontweight='bold')
+        
+        # 4. Sustainability Metrics (Horizontal Bar)
+        sustainability_metrics = ['Extraction Rate', 'Sustainability Index', 'Safety Margin', 'Stress Level Score']
+        
+        # Normalize stress level to a score (lower is better)
+        stress_mapping = {'low_stress': 25, 'moderate_stress': 50, 'high_stress': 75, 'critical_stress': 100}
+        stress_score = stress_mapping.get(location_data['stress_level'], 50)
+        
+        sustain_values = [extraction_rate, 
+                         min(location_data['sustainability_index'], 300),  # cap at 300 for visualization
+                         max(location_data['safety_margin'], -100),  # cap at -100 for visualization
+                         stress_score]
+        
+        # Normalize values to 0-100 scale for comparison
+        normalized_values = [
+            extraction_rate,
+            (location_data['sustainability_index'] / 300) * 100,
+            ((location_data['safety_margin'] + 100) / 200) * 100,  # shift and scale
+            100 - stress_score  # invert so higher is better
+        ]
+        
+        colors_sustain = ['#e74c3c', '#2ecc71', '#3498db', '#9b59b6']
+        bars_h = ax4.barh(sustainability_metrics, normalized_values, color=colors_sustain)
+        ax4.set_title('Sustainability Metrics (Normalized 0-100)', fontweight='bold')
+        ax4.set_xlabel('Score')
+        ax4.set_xlim(0, 100)
+        
+        # Add value labels
+        for bar, original_val, metric in zip(bars_h, sustain_values, sustainability_metrics):
+            width = bar.get_width()
+            if metric == 'Sustainability Index':
+                label = f'{original_val:.1f}'
+            elif metric == 'Safety Margin':
+                label = f'{original_val:.1f}%'
+            elif metric == 'Stress Level Score':
+                label = location_data['stress_level'].replace('_', ' ').title()
+            else:
+                label = f'{original_val:.1f}%'
+            
+            ax4.text(width + 2, bar.get_y() + bar.get_height()/2.,
+                    label, ha='left', va='center', fontsize=9)
+        
+        # 5. Firka Status Distribution (Stacked Bar)
+        firka_categories = ['Over-Exploited', 'Semi-Critical', 'Safe']
+        firka_counts = [location_data['over_exploited_firkas'],
+                       location_data['semi_critical_firkas'],
+                       location_data['safe_firkas']]
+        firka_colors = ['#dc3545', '#ffc107', '#28a745']
+        
+        ax5.bar(['Firka Status'], [sum(firka_counts)], color='lightgray', alpha=0.3)
+        
+        bottom = 0
+        for count, color, label in zip(firka_counts, firka_colors, firka_categories):
+            if count > 0:
+                ax5.bar(['Firka Status'], [count], bottom=bottom, color=color, label=label)
+                ax5.text(0, bottom + count/2, str(count), ha='center', va='center', fontweight='bold')
+                bottom += count
+        
+        ax5.set_title('Firka Status Distribution', fontweight='bold')
+        ax5.set_ylabel('Number of Firkas')
+        ax5.legend()
+        ax5.set_ylim(0, sum(firka_counts) + 1)
+        
+        # 6. Recharge vs Draft Comparison
+        recharge_draft = ['Total Recharge', 'Total Draft']
+        recharge_draft_values = [location_data['total_recharge'], location_data['total_draft']]
+        colors_rd = ['#2ecc71', '#e74c3c']
+        
+        bars_rd = ax6.bar(recharge_draft, recharge_draft_values, color=colors_rd)
+        ax6.set_title('Recharge vs Draft (ha-m)', fontweight='bold')
+        ax6.set_ylabel('Volume (ha-m)')
+        
+        # Add value labels
+        for bar, value in zip(bars_rd, recharge_draft_values):
+            height = bar.get_height()
+            ax6.text(bar.get_x() + bar.get_width()/2., height + (max(recharge_draft_values) * 0.01),
+                    f'{value:,.0f}', ha='center', va='bottom', fontsize=9)
+        
+        # Add balance indicator
+        balance_ratio = location_data['total_recharge'] / location_data['total_draft']
+        balance_text = f"Balance Ratio: {balance_ratio:.2f}"
+        if balance_ratio > 1.2:
+            balance_color = '#2ecc71'
+            balance_status = "(Surplus)"
+        elif balance_ratio > 1.0:
+            balance_color = '#f39c12'
+            balance_status = "(Balanced)"
+        else:
+            balance_color = '#e74c3c'
+            balance_status = "(Deficit)"
+        
+        ax6.text(0.5, 0.95, f"{balance_text} {balance_status}", 
+                transform=ax6.transAxes, ha='center', va='top', 
+                bbox=dict(boxstyle="round,pad=0.3", facecolor=balance_color, alpha=0.7),
+                fontweight='bold', color='white')
+        
+        # Main title
+        fig.suptitle(f'Comprehensive Groundwater Analysis: {location_title}', 
+                    fontsize=20, fontweight='bold', y=0.98)
+        
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.93)
+        
+        # Save to BytesIO
+        img_buffer = BytesIO()
+        plt.savefig(img_buffer, format='png', dpi=300, bbox_inches='tight')
+        plt.close(fig)
+        
+        img_buffer.seek(0)
+        image_bytes = img_buffer.getvalue()
+        img_buffer.close()
+        
+        return image_bytes
+        
+    except Exception as e:
+        print(f"Error generating single location analysis chart: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+def generate_key_metrics_summary_chart(groundwater_data, location_name):
+    """
+    Generates a focused chart showing only the 5 most critical metrics for users.
+    """
+    try:
+        flattened_data = groundwater_data.get('flattened_data', [])
+        
+        # Find data for the requested location
+        location_data = None
+        for item in flattened_data:
+            if location_name.lower() in item['location'].lower():
+                location_data = item
+                break
+        
+        if not location_data:
+            return None
+        
+        # Create a single chart with 5 key metrics
+        fig, ax = plt.subplots(figsize=(14, 8))
+        
+        location_title = location_data['location'].title()
+        
+        # Define the 5 most important metrics for users
+        metrics = ['Extraction\nRate (%)', 'Safety\nMargin (%)', 'Sustainability\nIndex', 
+                  'Net Balance\n(ha-m)', 'Firka Risk\nScore']
+        
+        # Calculate firka risk score (0-100, higher = more risk)
+        total_firkas = (location_data['over_exploited_firkas'] + 
+                       location_data['semi_critical_firkas'] + 
+                       location_data['safe_firkas'])
+        
+        if total_firkas > 0:
+            risk_score = ((location_data['over_exploited_firkas'] * 100 + 
+                          location_data['semi_critical_firkas'] * 50) / total_firkas)
+        else:
+            risk_score = 0
+        
+        values = [
+            location_data['extraction_rate_total'],
+            location_data['safety_margin'],
+            location_data['sustainability_index'],
+            location_data['net_balance'] / 1000,  # Convert to thousands for readability
+            risk_score
+        ]
+        
+        # Color code based on performance (green = good, red = bad)
+        def get_metric_color(metric, value):
+            if metric == 'Extraction\nRate (%)':
+                if value <= 70: return '#28a745'
+                elif value <= 90: return '#ffc107'
+                elif value <= 100: return '#fd7e14'
+                else: return '#dc3545'
+            elif metric == 'Safety\nMargin (%)':
+                if value >= 30: return '#28a745'
+                elif value >= 10: return '#ffc107'
+                elif value >= 0: return '#fd7e14'
+                else: return '#dc3545'
+            elif metric == 'Sustainability\nIndex':
+                if value >= 150: return '#28a745'
+                elif value >= 100: return '#ffc107'
+                elif value >= 75: return '#fd7e14'
+                else: return '#dc3545'
+            elif metric == 'Net Balance\n(ha-m)':
+                if value >= 2: return '#28a745'
+                elif value >= 0: return '#ffc107'
+                elif value >= -1: return '#fd7e14'
+                else: return '#dc3545'
+            elif metric == 'Firka Risk\nScore':
+                if value <= 20: return '#28a745'
+                elif value <= 40: return '#ffc107'
+                elif value <= 70: return '#fd7e14'
+                else: return '#dc3545'
+            return '#3498db'
+        
+        colors = [get_metric_color(metric, value) for metric, value in zip(metrics, values)]
+        
+        # Create bars
+        bars = ax.bar(metrics, values, color=colors, alpha=0.8, edgecolor='black', linewidth=1)
+        
+        # Customize the chart
+        ax.set_title(f'Key Groundwater Metrics: {location_title}', 
+                    fontsize=16, fontweight='bold', pad=20)
+        ax.set_ylabel('Value', fontsize=12)
+        ax.grid(True, alpha=0.3)
+        
+        # Add value labels on bars
+        for bar, value, metric in zip(bars, values, metrics):
+            height = bar.get_height()
+            
+            # Format label based on metric type
+            if 'ha-m' in metric:
+                label = f'{value*1000:,.0f}'  # Convert back to original scale
+            elif 'Score' in metric:
+                label = f'{value:.0f}'
+            else:
+                label = f'{value:.1f}'
+            
+            # Position label
+            if height >= 0:
+                va = 'bottom'
+                y_pos = height + (max(values) * 0.02)
+            else:
+                va = 'top'
+                y_pos = height - (max(values) * 0.02)
+                
+            ax.text(bar.get_x() + bar.get_width()/2., y_pos, label,
+                   ha='center', va=va, fontweight='bold', fontsize=10)
+        
+        # Add status legend
+        status_text = f"Overall Status: {location_data['overall_status'].replace('_', ' ').title()}"
+        status_color = get_metric_color('Extraction\nRate (%)', location_data['extraction_rate_total'])
+        
+        ax.text(0.02, 0.98, status_text, transform=ax.transAxes, 
+               bbox=dict(boxstyle="round,pad=0.5", facecolor=status_color, alpha=0.8),
+               fontsize=12, fontweight='bold', color='white', va='top')
+        
+        plt.tight_layout()
+        
+        # Save to BytesIO
+        img_buffer = BytesIO()
+        plt.savefig(img_buffer, format='png', dpi=300, bbox_inches='tight')
+        plt.close(fig)
+        
+        img_buffer.seek(0)
+        image_bytes = img_buffer.getvalue()
+        img_buffer.close()
+        
+        return image_bytes
+        
+    except Exception as e:
+        print(f"Error generating key metrics chart: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 
 def get_location_details(lat, lon):
     """
@@ -743,6 +1744,282 @@ def get_location_details(lat, lon):
     except requests.exceptions.RequestException as e:
         print(f"Could not fetch address: {e}")
         return {"taluk": None, "district": None}
+
+def generate_taluk_pdf_report(groundwater_data, taluk_name):
+    """Generates a comprehensive PDF report for a specific taluk using reportlab."""
+    try:
+        from reportlab.lib.pagesizes import letter, A4
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.units import inch, cm
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+        from reportlab.lib import colors
+        from datetime import datetime
+        from io import BytesIO
+        import textwrap
+        
+        # Find the taluk data
+        flattened_data = groundwater_data.get('flattened_data', [])
+        taluk_data = None
+        
+        for item in flattened_data:
+            if taluk_name.lower() in item['location'].lower():
+                taluk_data = item
+                break
+        
+        if not taluk_data:
+            print(f"No data found for taluk: {taluk_name}")
+            return None
+        
+        # Create PDF buffer
+        pdf_buffer = BytesIO()
+        doc = SimpleDocTemplate(pdf_buffer, pagesize=A4,
+                               rightMargin=72, leftMargin=72,
+                               topMargin=72, bottomMargin=72)
+        
+        styles = getSampleStyleSheet()
+        
+        # Create custom styles
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=18,
+            spaceAfter=30,
+            alignment=1  # center
+        )
+        
+        heading_style = ParagraphStyle(
+            'CustomHeading',
+            parent=styles['Heading2'],
+            fontSize=14,
+            spaceAfter=12,
+            spaceBefore=12
+        )
+        
+        normal_style = ParagraphStyle(
+            'CustomNormal',
+            parent=styles['Normal'],
+            fontSize=10,
+            spaceAfter=6
+        )
+        
+        # Build story (content)
+        story = []
+        
+        # Title
+        story.append(Paragraph(f"GROUNDWATER REPORT: {taluk_data['location'].upper()}", title_style))
+        
+        # Metadata
+        story.append(Paragraph(f"<b>Report Generated:</b> {datetime.now().strftime('%Y-%m-%d %H:%M')}", normal_style))
+        story.append(Paragraph(f"<b>District:</b> Erode", normal_style))
+        story.append(Spacer(1, 20))
+        
+        # 1. Executive Summary
+        story.append(Paragraph("EXECUTIVE SUMMARY", heading_style))
+        
+        status_descriptions = {
+            'safe': 'GOOD',
+            'semi_critical': 'WARNING', 
+            'critical': 'CRITICAL',
+            'over_exploited': 'EMERGENCY'
+        }
+        
+        status_desc = status_descriptions.get(taluk_data['overall_status'], 'UNKNOWN')
+        
+        extraction_rate = taluk_data['extraction_rate_total']
+        status_text = ""
+        if extraction_rate > 100:
+            status_text = f"CRITICAL - Using {extraction_rate:.1f}% of available water (over-exploited)"
+        elif extraction_rate > 90:
+            status_text = f"HIGH - Using {extraction_rate:.1f}% of available water (approaching critical)"
+        else:
+            status_text = f"ACCEPTABLE - Using {extraction_rate:.1f}% of available water"
+        
+        net_balance = taluk_data['net_balance']
+        balance_text = f"Water surplus: {net_balance:,.0f} ha-m" if net_balance >= 0 else f"Water deficit: {abs(net_balance):,.0f} ha-m"
+        
+        summary_text = f"""
+        <b>Overall Status:</b> {status_desc} - {taluk_data['overall_status'].replace('_', ' ').title()}
+        <b>Extraction Rate:</b> {status_text}
+        <b>Water Balance:</b> {balance_text}
+        """
+        
+        story.append(Paragraph(summary_text, normal_style))
+        story.append(Spacer(1, 15))
+        
+        # 2. Key Metrics Table
+        story.append(Paragraph("KEY PERFORMANCE INDICATORS", heading_style))
+        
+        metrics_data = [
+            ['Metric', 'Value', 'Status'],
+            ['Extraction Rate', f"{taluk_data['extraction_rate_total']:.1f}%", 
+             'CRITICAL' if extraction_rate > 100 else 'HIGH' if extraction_rate > 90 else 'ACCEPTABLE'],
+            ['Safety Margin', f"{taluk_data['safety_margin']:.1f}%", 
+             'GOOD' if taluk_data['safety_margin'] > 30 else 'LOW' if taluk_data['safety_margin'] > 10 else 'CRITICAL'],
+            ['Sustainability Index', f"{taluk_data['sustainability_index']:.1f}", 
+             'GOOD' if taluk_data['sustainability_index'] > 150 else 'FAIR' if taluk_data['sustainability_index'] > 100 else 'POOR'],
+            ['Net Water Balance', f"{taluk_data['net_balance']:,.0f} ha-m", 
+             'SURPLUS' if taluk_data['net_balance'] >= 0 else 'DEFICIT'],
+            ['Total Availability', f"{taluk_data['total_availability']:,.0f} ha-m", ''],
+            ['Total Draft', f"{taluk_data['total_draft']:,.0f} ha-m", ''],
+            ['Total Recharge', f"{taluk_data['total_recharge']:,.0f} ha-m", '']
+        ]
+        
+        table = Table(metrics_data, colWidths=[2.5*inch, 1.5*inch, 1.5*inch])
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 1), (-1, -1), 9),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        
+        story.append(table)
+        story.append(Spacer(1, 15))
+        
+        # 3. Water Usage Breakdown
+        story.append(Paragraph("WATER USAGE DISTRIBUTION", heading_style))
+        
+        total_draft = taluk_data['total_draft']
+        agriculture_pct = (taluk_data['agriculture_draft'] / total_draft) * 100
+        domestic_pct = (taluk_data['domestic_draft'] / total_draft) * 100
+        industry_pct = (taluk_data['industry_draft'] / total_draft) * 100
+        
+        usage_data = [
+            ['Sector', 'Percentage', 'Volume (ha-m)'],
+            ['Agriculture', f"{agriculture_pct:.1f}%", f"{taluk_data['agriculture_draft']:,.0f}"],
+            ['Domestic', f"{domestic_pct:.1f}%", f"{taluk_data['domestic_draft']:,.0f}"],
+            ['Industry', f"{industry_pct:.1f}%", f"{taluk_data['industry_draft']:,.0f}"],
+            ['TOTAL', '100.0%', f"{total_draft:,.0f}"]
+        ]
+        
+        usage_table = Table(usage_data, colWidths=[2*inch, 1.5*inch, 1.5*inch])
+        usage_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('BACKGROUND', (0, -1), (-1, -1), colors.darkgrey),
+            ('TEXTCOLOR', (0, -1), (-1, -1), colors.white),
+            ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        
+        story.append(usage_table)
+        story.append(Spacer(1, 15))
+        
+        # 4. Firka Status
+        story.append(Paragraph("AREA-WISE STATUS (FIRKAS)", heading_style))
+        
+        total_firkas = (taluk_data['over_exploited_firkas'] + 
+                       taluk_data['semi_critical_firkas'] + 
+                       taluk_data['safe_firkas'])
+        
+        firka_data = [
+            ['Status', 'Number of Areas', 'Percentage'],
+            ['Over-exploited', str(taluk_data['over_exploited_firkas']), 
+             f"{(taluk_data['over_exploited_firkas']/total_firkas*100):.1f}%"],
+            ['Semi-critical', str(taluk_data['semi_critical_firkas']), 
+             f"{(taluk_data['semi_critical_firkas']/total_firkas*100):.1f}%"],
+            ['Safe', str(taluk_data['safe_firkas']), 
+             f"{(taluk_data['safe_firkas']/total_firkas*100):.1f}%"],
+            ['TOTAL', str(total_firkas), '100.0%']
+        ]
+        
+        firka_table = Table(firka_data, colWidths=[2*inch, 1.5*inch, 1.5*inch])
+        firka_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.darkgreen),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('BACKGROUND', (0, -1), (-1, -1), colors.darkgrey),
+            ('TEXTCOLOR', (0, -1), (-1, -1), colors.white),
+            ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        
+        story.append(firka_table)
+        story.append(Spacer(1, 15))
+        
+        # 5. Recommendations
+        story.append(Paragraph("RECOMMENDATIONS", heading_style))
+        
+        recommendations = []
+        
+        if taluk_data['extraction_rate_total'] > 100:
+            recommendations = [
+                "🚨 URGENT ACTION REQUIRED:",
+                "• Implement immediate water conservation measures",
+                "• Convert to drip irrigation for agriculture",
+                "• Enforce strict industrial water usage limits",
+                "• Consider temporary water rationing",
+                "• Promote rainwater harvesting systems",
+                "• Conduct public awareness campaigns"
+            ]
+        elif taluk_data['extraction_rate_total'] > 90:
+            recommendations = [
+                "HIGH PRIORITY: Water conservation needed",
+                "• Promote efficient irrigation techniques",
+                "• Conduct water audit for major consumers",
+                "• Develop drought contingency plans",
+                "• Invest in water recycling systems",
+                "• Monitor groundwater levels weekly"
+            ]
+        else:
+            recommendations = [
+                "MAINTAIN GOOD PRACTICES:",
+                "• Continue regular water monitoring",
+                "• Promote sustainable water use habits",
+                "• Maintain water conservation infrastructure",
+                "• Prepare long-term water security plans",
+                "• Encourage community participation"
+            ]
+        
+        for rec in recommendations:
+            if rec.startswith("🚨") or rec.startswith("•"):
+                story.append(Paragraph(rec, normal_style))
+            else:
+                story.append(Paragraph(f"<b>{rec}</b>", normal_style))
+        
+        story.append(Spacer(1, 15))
+        
+        # 6. Contact Information
+        story.append(Paragraph("CONTACT INFORMATION", heading_style))
+        
+        contacts = [
+            "• District Water Management Department: 044-XXXX-XXXX",
+            "• Groundwater Authority Helpdesk: 1800-XXX-XXXX",
+            "• Emergency Water Services: 1077 (Toll-free)",
+            "• Environmental Protection Agency: 1800-XXX-XXXX",
+            "• Local Municipal Office: Contact your ward office"
+        ]
+        
+        for contact in contacts:
+            story.append(Paragraph(contact, normal_style))
+        
+        # Footer
+        story.append(Spacer(1, 20))
+        story.append(Paragraph("<i>Generated by Hydra AI Groundwater Monitoring System - Comprehensive Water Resource Analysis</i>", 
+                             ParagraphStyle('Footer', parent=styles['Italic'], fontSize=8, alignment=1)))
+        
+        # Build PDF
+        doc.build(story)
+        pdf_buffer.seek(0)
+        
+        print(f"PDF generated successfully for {taluk_name}")
+        return pdf_buffer.getvalue()
+        
+    except Exception as e:
+        print(f"Error generating PDF report: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
 
 def get_media_url(media_id):
     url = f"https://graph.facebook.com/v19.0/{media_id}/"
